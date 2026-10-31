@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-31T01:51:18.621893+00:00",
+  "generatedAt": "2026-10-30",
   "title": "Design System: AETHRIVA",
   "extensions": {
     "colorMeta": {
@@ -158,6 +158,16 @@
         "name": "state-transition",
         "value": ".18s",
         "purpose": "Navigation, buttons, questions, and metric-card actions."
+      },
+      {
+        "name": "workspace-arrival",
+        "value": ".26s",
+        "purpose": "Visible page arrival on navigation only; reduced-motion overrides apply."
+      },
+      {
+        "name": "coverage-arrival",
+        "value": ".6s",
+        "purpose": "Finite coverage-dial reveal; no continuous motion or health scoring."
       }
     ],
     "breakpoints": [
@@ -277,13 +287,15 @@
   ],
   "narrative": {
     "northStar": "Carbon + IBM Plex Sans",
-    "overview": "A dark, calm evidence workspace with precise IBM Plex Sans typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it. All observations and import details are synthetic; Intelligence calculates locally.",
+    "overview": "A Carbon health workspace with IBM Plex Sans, a dated coverage dial, spacious pastel measurements and complete inline evidence. Real local history stays private. A manufacturer-photo catalog helps people identify home devices; idle pairing is a compact dark panel.",
     "keyCharacteristics": [
       "Carbon navigation rail on desktop; horizontally scrolling routes below 1200px.",
       "Four pastel reading panels with dark ink and complete units.",
       "Four-track dated-record coverage calendar; phone readings precede the circle.",
       "Compact aligned Recovery charts with one keyboard entry per plot.",
-      "Saved answer dates, named sources, metric scope, and complete inline evidence."
+      "Saved answer dates, named sources, metric scope, and complete inline evidence.",
+      "Official manufacturer product photos with concise physical-device definitions.",
+      "A quiet Carbon Bluetooth panel with progressive compatibility details."
     ],
     "rules": [
       {

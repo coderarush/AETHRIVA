@@ -31,3 +31,7 @@ The fictional October fixture and its legacy helpers now live only under `tests/
 IBM Plex Sans variable Roman font and OFL license come from IBM's official `IBM/plex` repository; exact URLs and hashes are recorded in `dist/assets/ibm-plex-sans-provenance.json`. The previous font remains in Git history.
 
 `server/local-journal.mjs` and new journal client/rendering modules are original AETHRIVA work. They reuse the existing provider-cache mapping and shared Bluetooth quality interpretation, preserving original source credit. The original Health app folders, installed synchronization service, credentials and provider database remain outside this publishable source tree.
+
+## Product imagery
+
+`dist/assets/devices/` contains 32 official manufacturer image assets used by 33 named catalog guides (the same Polar H10 photo serves its two measurement guides). No product photographs were generated. `dist/assets/devices/provenance.json` records exact model, manufacturer page/image URLs, attribution and verification. The 3 generic Bluetooth service entries use labeled category icons. `dist/connections/product-media.js` holds concise display definitions and local image paths; original compatibility/setup facts remain in the catalog.

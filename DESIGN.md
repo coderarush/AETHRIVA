@@ -130,7 +130,7 @@ Overview's reading panels use `#ded3ff`, `#ffd5b9`, `#c9dfff`, and `#c0eedf` in 
 
 **Metric continuity:** retain the same measurement identity across its panel, full chart, coverage track, units, and evidence. Color supports the written metric name; it does not encode health quality.
 
-The Bluetooth session panel deliberately reuses the mint reading surface `#c0eedf` and dark ink `#182027`. Its local tonal accents are `#aedfce` for the icon tile, `#254f44` for status text, `#547d70` for control borders, `#f0fff9` for text on the dark primary button, and `#99c2b4` for the supporting rule. These are component-specific tones within the existing palette, not a new theme or a signal that a measurement is healthy. Labels, warnings and connection state carry the meaning.
+The Bluetooth panel uses the Carbon surface `#1a1e24`, light text and a restrained blue action. Idle state omits the large numeric placeholder and keeps static compatibility/storage guidance in a native disclosure. Accepted values and quality warnings remain prominent during a session. Product photos use a light neutral `#f3f5f7` frame so the physical hardware remains identifiable without tinting its appearance.
 
 ## Typography
 
@@ -138,7 +138,7 @@ IBM Plex Sans is bundled locally as a variable Roman WOFF2 (weight axis 100–70
 
 Use a fixed product type scale: page titles are 30px/1.25 at weight 600, reducing to 28px below 600px. Section headings are 22px/1.3 at 600 and component headings are 18px/1.4 at 600. Body copy and data tables use 16px/1.6 at 400, including on phones. Controls and functional labels use 14px at 500; supporting chart axes use 14px at 400. Minor metadata and record IDs use 13px at 400. Prose stays near 65–75 characters per line. Headings and labels use normal letter spacing.
 
-Selected-day, Recovery and Bluetooth readings use 36px at weight 600 on desktop and 30px on phones, with complete units and tabular numerals. Supporting numeric summaries use 22px; Timeline values use 18px. Only numeric readings use slightly tighter `-.015em` tracking. Missing or hidden reading messages use 22px on desktop and 18px on phones, so state explanations remain distinct from observed numbers. The coverage calendar's center date uses 56px on desktop and 48px on phones.
+Selected-day, Recovery and Bluetooth readings use 36px at weight 600 on desktop and 30px on phones, with complete units and tabular numerals. Supporting numeric summaries use 22px; Timeline values use 18px. Only numeric readings use slightly tighter `-.015em` tracking. Missing or hidden reading messages use 22px on desktop and 18px on phones, so state explanations remain distinct from observed numbers. The coverage calendar center keeps a large date and weekday. The legend adds actual recorded-day counts, never a health score.
 
 Controls retain at least 44px height across responsive layouts. Chart points keep their existing date spacing, with a 44px high hit area and the equivalent bounded day controls. Placeholder text uses the existing secondary foreground at full opacity; table headers align to the top and use 14px medium weight, while table values retain 16px and tabular numerals. Print retains its compact reading scale.
 
@@ -150,7 +150,7 @@ With recorded history, Overview places the coverage calendar beside a two-by-two
 
 Recovery uses four aligned full-width rows, each with a reading column and a shared-width chart. Above 600px the plot height is 120px so several measurements fit together; on phones each reading precedes its 180px chart. Earlier/later comparisons follow these rows. Odd ranges explicitly name dates excluded to make comparison windows equal.
 
-Connections uses a labelled search field, category controls, readable device rows and inline setup details. Its source history and Bluetooth session sections reuse the existing surfaces, typography and action styles. Connection status, hardware-validation limits and measurement warnings remain written text alongside the readings.
+Connections uses a labelled search field, category controls and a three-column hardware gallery (two columns below 1000px; one compact photo-and-copy column below 700px). All 33 named guides have actual manufacturer product photos; the 3 generic protocol categories use explicit type icons. Each item shows its name, a short physical-device type, a definition of at most 100 characters and an honest connection status. Detailed setup expands inline, with a larger product photo. Its source history and Bluetooth session sections reuse the existing surfaces, typography and action styles. Connection status, hardware-validation limits and measurement warnings remain written text alongside the readings.
 
 On phones, full charts use a minimum width derived from date count, allowing horizontal panning with readable targets. The value axis stays sticky at the left; a swipe hint explains the overflow. Supporting source rows, findings, and About sections stack at their own content breakpoints. Print uses light surfaces and removes interactive shell controls.
 
@@ -173,7 +173,7 @@ General panels and readings use 14px corners; the daily journal uses 16px. Phone
 - **Connection states:** catalog discovery is separate from nearby-device pairing. Show the actual chooser, connection, waiting, receiving, rejection and disconnection states. Exact-model hardware compatibility remains unverified. Accepted measurements retain quality warnings; a rejected latest packet or disconnected session marks a previous value stale.
 - **Daily provenance:** display a civil date and “Daily aggregate” for provider summaries. Keep original sums, counts, units and aggregation method inspectable; day-marker timestamps are not exact observation times.
 - **Intelligence and evidence:** the labelled composer shows current dates, named sources, and metric scope. Each retained answer separately displays its saved dates, named sources, and metric scope; later filter changes do not rewrite its evidence context. “Trace this finding” opens inline evidence with complete calculation inputs, provenance, and a labelled keyboard-focusable scroll region. Closing it returns to its originating action.
-- **Motion:** state transitions use 180ms and `cubic-bezier(.16,1,.3,1)`. The user's Reduce motion setting and OS preference both disable animated transitions and programmatic smooth scrolling. No continuous decorative motion is used.
+- **Motion:** state transitions use 180ms and `cubic-bezier(.16,1,.3,1)`. Navigation uses a single 260ms visible-page arrival; the coverage SVG has a 600ms rotation/clip reveal when motion is allowed. The user's Reduce motion setting and OS preference both disable animated transitions and programmatic smooth scrolling. No continuous decorative motion is used.
 
 ## Do's and Don'ts
 
@@ -184,3 +184,5 @@ General panels and readings use 14px corners; the daily journal uses 16px. Phone
 - **Don't** show invented measurements, imply a catalog listing is a tested connection, turn live heart rate into resting heart rate or ECG, or present locally calculated answers as live AI.
 
 Source of truth: `dist/styles.css`, `dist/experience.css`, `dist/workspace.css`, `dist/connections.css`, `dist/app.js`, `dist/charts.js`, and the page renderers. This document records current source behavior; validation evidence belongs in `docs/VERIFICATION.md`.
+
+The shell uses a quieter selected-navigation treatment, consistent scope controls and compact two-row phone filters. No-data first visits without an explicit route open Connections so people can identify a source or device immediately; recorded workspaces still open Overview.

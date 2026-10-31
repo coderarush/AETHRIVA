@@ -29,3 +29,5 @@ Intelligence supports five deterministic question intents using local calculatio
 Current behavior is documented in `docs/CONTRACTS.md` and `docs/IMPLEMENTATION.md`. Earlier synthetic demonstration plans and preserved PRD material are historical context. Synthetic fixtures now live only under `tests/fixtures/` and are not part of the browser runtime.
 
 The active local backend supports same-origin validated writes, deduplication, operational status and unavailable-provider handling. Reports include daily measurements, workouts and saved device readings, with consistent source/day counts and visible provider-outage notices. Interactive device tables paginate at 100 rows; printable reports retain the full selected set.
+
+The current visual pass adds a manufacturer-photo device gallery with short definitions, a compact Carbon pairing panel and a more prominent real-data coverage calendar. Empty first visits start at Connections; recorded workspaces retain Overview.

@@ -19,3 +19,14 @@ Verified October 30, 2026 (Pacific time).
 The current finished scope is the **local workspace**, as requested. The public Site serves the interface, empty first run and supported browser connection flow; it has no personal-data backend or private account system. Private records and the journal are excluded from Git and deployment. The original provider database remains read-only.
 
 No physical Bluetooth device was paired during verification. Standard Heart Rate, Blood Pressure and Pulse Oximeter protocol/lifecycle tests do not establish compatibility with every model/firmware/browser. ECG, proprietary glucose/device protocols and manufacturer cloud integrations remain separate implementation work. PDF print rendering and every operating-system/browser combination have not been visually validated.
+
+## Visual experience release
+
+- 105 regression tests pass, including image coverage, valid raster signatures and local asset paths; static syntax/asset checks cover 60 runtime files.
+- All 33 named guides have manufacturer photographs (32 unique assets); generic protocol categories remain explicit icons. Gallery search, inline full-photo details, close-focus restoration and pairing anchor focus were exercised at 320px. A pending search is canceled on a catalog pointer action to prevent result replacement during a click.
+- 35 measured responsive checks across all 7 views at 320/390/768/1024/1440px passed with no document or reading overflow and no render-error states.
+- Idle pairing is a Carbon panel without a giant placeholder value. Phone height was measured at 298px with compatibility/storage disclosure closed. Warnings and active measurements remain visible.
+- The GPT-6.1 Sol visual worker reviewed the valid desktop gallery capture and mobile source/layout rules: no material visual blocker; the noted close-target width was raised to 44px. Other native capture files that showed the wrong route/viewport were discarded and are not treated as verification.
+- This pass changes UI and image delivery only. Existing private databases, source normalization, calculations and connection protocols retain their previous behavior. No physical device pairing was performed.
+
+The final static first visit was verified to open Connections with no records loaded. The design detector returned 75 advisory palette, radius and type-scale findings and no non-advisory findings; the intentional current Carbon/pastel treatments are documented in DESIGN.md.

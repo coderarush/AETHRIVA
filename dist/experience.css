@@ -189,3 +189,102 @@
 @media(min-width:601px){.recovery-chart{padding:14px 0 10px;gap:28px}.recovery-reading{padding:5px 0 0}.recovery-value{font-size:2.25rem;margin-top:11px;font-weight:600;letter-spacing:-.015em;line-height:1.15}.recovery-date{margin-top:4px}.recovery-reading .measure-context{margin-top:9px}.recovery-reading .evidence-button,.recovery-reading .text-button{min-height:44px;margin-top:1px}.recovery-plot .chart-scroll{padding:24px 4px 5px}.recovery-plot .chart-scale,.recovery-plot .chart-plot,.recovery-plot .chart-plot>svg{height:120px}.recovery-plot .chart-plot{margin-bottom:24px}.recovery-plot .chart-footer{padding-top:4px}.recovery-plot .chart-footer .evidence-button{min-height:44px}.recovery-plot .chart-empty{min-height:165px;margin:12px 0}.recovery-plot .chart-tip{font-size:.875rem;padding:5px 8px}}
 @media(max-width:900px) and (min-width:601px){.recovery-intro{flex-direction:row;align-items:center}.recovery-chart{grid-template-columns:185px minmax(0,1fr);gap:20px}.recovery-intro p{max-width:35ch}}
 @media(max-width:600px){.recovery-intro{gap:20px}.recovery-intro h2{font-size:1.375rem;line-height:1.3}.recovery-chart .chart-scale,.recovery-chart .chart-plot,.recovery-chart .chart-plot>svg{height:180px}.recovery-chart{padding-top:22px}}
+
+/* The coverage calendar is the signature: a map of real records, with quiet framing. */
+@media screen {
+ .overview-page .daily-journal{padding:32px;gap:24px 40px;background:var(--surface);grid-template-columns:minmax(280px,.9fr) minmax(0,1.4fr)}
+ .journal-centerpiece{justify-content:flex-start;gap:18px}
+ .journal-centerpiece>h2{width:100%;padding-bottom:2px}
+ .coverage-calendar{max-width:360px}
+ .coverage-dial{width:min(100%,306px)}
+ .coverage-segment{stroke-width:8;stroke:var(--control-line);stroke-opacity:.3}
+ .coverage-segment[data-coverage=recorded]{stroke-opacity:1}
+ .coverage-segment.is-selected{stroke-width:11}
+ .coverage-segment[data-coverage=excluded]{stroke-opacity:.24}
+ .coverage-date{gap:5px}
+ .coverage-date>strong{font-size:3.5rem;line-height:1.05}
+ .coverage-date>span{font-size:13px}
+ .coverage-calendar figcaption{gap:5px;max-width:32ch;margin-top:5px}
+ .coverage-calendar figcaption>strong{font-size:16px;font-weight:500}
+ .coverage-legend{grid-template-columns:1fr;gap:0;margin:18px 8px 0;font-size:14px}
+ .coverage-legend li{align-items:center;gap:9px;min-height:30px}
+ .coverage-legend i{width:7px;height:7px}
+ .coverage-track-count{margin-left:auto;font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+ .journal-centerpiece .day-navigator{margin-top:auto}
+ .overview-page .day-measures{gap:16px}
+ .overview-page .day-measure{padding:26px 24px 16px!important}
+ .overview-page .day-measure h3{min-height:22px}
+ .overview-page .measure-value{margin-top:22px;margin-bottom:6px}
+ .overview-page .mini-chart{margin-top:auto;padding-top:20px}
+ .overview-page .mini-chart>svg{height:58px}
+ .overview-page .mini-chart figcaption{margin-top:8px}
+ .overview-page .mini-chart-empty{margin-top:auto;padding-top:20px;min-height:98px}
+ .overview-page .metric-card-actions{margin-top:14px;padding-top:7px;border-top:1px solid #18202729}
+ .overview-page .daily-footer{padding-top:18px}
+ .month-section{margin-top:48px}
+ .plot-metric-tabs{gap:4px;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+ .plot-metric-tabs button{border-color:transparent}
+ .plot-metric-tabs button[aria-pressed=true]{border-color:transparent;background:var(--surface)}
+ .focus-layout{gap:36px}
+ .trend-heading{margin-bottom:12px}
+ .perspective{padding:24px;background:var(--surface);border:0;border-radius:14px}
+ .perspective h2{font-size:22px;line-height:1.3}
+ .perspective>p{margin-top:16px}
+ .perspective .button-row{margin-top:22px}
+ .coverage-ribbon{gap:14px 30px;padding:24px 0;margin-top:28px}
+ .coverage-ribbon strong{display:inline-block;margin-right:3px;font-size:18px;font-weight:500;font-variant-numeric:tabular-nums}
+ .source-journey{padding:32px 0}
+ .chart-scroll{scrollbar-color:var(--control-line) var(--canvas)}
+}
+@media screen and (min-width:781px) and (max-width:1100px){
+ .overview-page .daily-journal{padding:26px;gap:24px;grid-template-columns:minmax(250px,.9fr) minmax(0,1.3fr)}
+ .overview-page .day-measure{padding:22px 18px 14px!important}
+ .coverage-dial{width:270px}
+ .overview-page .day-measure h3{min-height:40px;align-items:flex-start}
+ .overview-page .measure-value{margin-top:16px}
+}
+@media screen and (max-width:900px){
+ .perspective{gap:0 30px}
+ .perspective>p{margin-top:0}
+}
+@media screen and (max-width:780px){
+ .overview-page .daily-journal{grid-template-columns:1fr;padding:28px;gap:28px}
+ .journal-centerpiece{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 28px}
+ .coverage-calendar{max-width:320px}
+ .coverage-dial{width:270px}
+ .journal-centerpiece .day-navigator{margin-top:0}
+ .overview-page .day-measure{padding:24px 22px 16px!important}
+ .overview-page .mini-chart{margin-top:14px;padding-top:0}
+ .coverage-legend{margin:16px 8px 0}
+}
+@media screen and (max-width:560px){
+ .overview-page .daily-journal{display:flex;padding:22px 16px;gap:22px}
+ .journal-centerpiece{display:contents}
+ .journal-centerpiece .day-navigator{margin:0;gap:6px;max-width:100%}
+ .journal-centerpiece .day-navigator input{width:150px}
+ .journal-centerpiece .day-navigator .button{width:44px;min-width:44px}
+ .overview-page .day-measures{gap:10px}
+ .overview-page .day-measure{padding:18px 12px 12px!important}
+ .overview-page .day-measure h3{min-height:40px;align-items:flex-start;gap:6px}
+ .overview-page .measure-value{margin:12px 0 0;min-height:68px;font-size:30px;overflow-wrap:anywhere}
+ .overview-page .measure-value.is-missing,.overview-page .measure-value.is-hidden{font-size:18px;min-height:68px}
+ .overview-page .mini-chart{margin-top:2px}
+ .overview-page .mini-chart>svg{height:42px}
+ .overview-page .mini-chart-empty{min-height:74px;padding-top:8px;margin-top:0}
+ .overview-page .metric-card-actions{margin-top:14px;padding-top:5px}
+ .coverage-calendar{max-width:310px;padding-top:12px}
+ .coverage-dial{width:min(100%,280px)}
+ .coverage-legend{margin:16px 10px 0}
+ .coverage-calendar figcaption{max-width:29ch}
+ .overview-page .daily-footer{padding-top:16px}
+ .month-section{margin-top:36px}
+ .plot-metric-tabs{gap:6px;padding-bottom:14px;margin-bottom:24px}
+ .plot-metric-tabs button{padding:10px 8px}
+ .perspective{padding:22px 20px;display:block}
+ .perspective>p{margin-top:14px}
+ .coverage-ribbon{gap:12px 20px}
+}
+@media screen and (prefers-reduced-motion:no-preference){
+ html:not([data-motion=off]) .coverage-dial>svg{animation:coverage-arrive 600ms cubic-bezier(.16,1,.3,1) both}
+ @keyframes coverage-arrive{from{transform:rotate(-7deg);clip-path:inset(2% round 50%)}to{transform:rotate(0);clip-path:inset(0 round 50%)}}
+}

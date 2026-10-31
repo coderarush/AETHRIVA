@@ -185,7 +185,8 @@ test('local HTTP serves only same-origin read-only data, protects static boundar
   await mkdir(staticRoot); await writeFile(path.join(staticRoot, 'index.html'), '<h1>Local</h1>');
   const secretPath = path.join(directory, 'secret.txt'); await writeFile(secretPath, 'DO NOT EXPOSE');
   await symlink(secretPath, path.join(staticRoot, 'linked.txt'));
-  const server = createLocalServer({databasePath, staticRoot, now: () => now});
+  const journalPath=path.join(directory,'journal.sqlite');
+  const server = createLocalServer({databasePath, journalPath, staticRoot, now: () => now});
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => server.close(resolve)));
   const allowed = await request(server, '/api/workspace', {Origin: 'http://127.0.0.1:4173', 'Sec-Fetch-Site': 'same-origin'});
@@ -204,12 +205,13 @@ test('local HTTP serves only same-origin read-only data, protects static boundar
   assert.equal((await request(server, '/')).status, 200);
   assert.equal((await request(server, '/%2e%2e%2fsecret.txt')).status, 403);
   assert.equal((await request(server, '/linked.txt')).status, 403);
-  const missing = createLocalServer({databasePath: path.join(directory, 'PRIVATE-MISSING.sqlite'), staticRoot});
+  const missing = createLocalServer({databasePath: path.join(directory, 'PRIVATE-MISSING.sqlite'), journalPath, staticRoot, now:()=>now});
   await new Promise(resolve => missing.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => missing.close(resolve)));
   const errorResponse = await request(missing, '/api/workspace');
-  assert.equal(errorResponse.status, 503);
-  assert.equal(JSON.parse(errorResponse.text).error.code, 'DATABASE_UNAVAILABLE');
+  assert.equal(errorResponse.status, 200);
+  assert.equal(JSON.parse(errorResponse.text).cache.available, false);
+  assert.ok(JSON.parse(errorResponse.text).notices.some(note=>note.includes('unavailable')));
   assert.ok(!errorResponse.text.includes(directory));
   assert.ok(!errorResponse.text.includes('PRIVATE-MISSING'));
 });

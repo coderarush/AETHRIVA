@@ -82,7 +82,7 @@ Retained answers save their effective dates, source names and metric scope. Tool
 
 The controller distinguishes connection from receiving usable measurements. It preserves available optional fields, units, device timestamps without invented time zones, status flags and quality warnings. Malformed packets are ignored. Pulse-oximeter demonstration/test/unavailable/invalid statuses are rejected. Accepted warnings remain visible; a previous accepted value is marked stale after a rejection or disconnection.
 
-Default retention is the last 120 accepted readings in page memory. CSV download preserves available received/device times, values/units, measurement and sensor status, sensor contact, RR intervals and warnings. No upload, cache write or daily-history merge occurs. Exact-model/firmware compatibility and ECG waveform support are not established by protocol tests.
+Default retention is the last 120 accepted readings in page memory. CSV download preserves available received/device times, values/units, measurement and sensor status, sensor contact, RR intervals and warnings. The local Save readings action persists accepted readings to the separate journal; it does not write the provider cache or merge spot values into daily analytics. Exact-model/firmware compatibility and ECG waveform support are not established by protocol tests.
 
 ## Rendering and delegated actions
 
@@ -102,3 +102,11 @@ Renderers return HTML and receive `ctx={state,filters,summary,comparison,insight
 | `data-print`, `data-motion` | Print or toggle reduced motion; OS reduced-motion preference is respected. |
 
 Source inputs use `name='source'`. Date and question forms remain `#custom-range` and `#question-form`; device search is `#device-search`. Full charts keep one keyboard entry point and Left/Right/Home/End date navigation. Mini charts are noninteractive. Evidence remains inline in a labelled focusable scroll region. Scope popovers dismiss on Escape/outside interaction, and rerenders retain focus and horizontal scroll where applicable.
+
+## Local journal additions
+
+Workspace snapshots optionally contain `cache:{available:boolean}` and `journal:{available:boolean}` plus `deviceReadings:[{id,sourceId:'bluetooth',deviceName,receivedAt,sample}]`. These flags survive validation; unknown fields are discarded. `sample` uses the supported decoder shape and recomputed quality warnings, retaining units/nulls/zero/status metadata. It is never a daily resting-heart-rate observation.
+
+The `checkins` source advertises only canonical `energy`. The `bluetooth` source advertises no canonical daily metrics. `journalUI` supplies pending-write state, check-in draft and device table page to renderers. Source/date/metric filters apply to all record types; spot device records and workouts require All metrics. Successful writes replace the immutable service snapshot and clear old answer evidence. New browser mutation methods live in `dist/data/journal-client.js`; failures keep the user's draft and current data.
+
+POST check-ins returns `{checkin:{id,date,energy},workspace}`; POST device readings returns `{accepted,inserted,duplicates,workspace}`. GET status returns `{status,cache,journal,capabilities}` without identity or health values. Original cache and new local journal are separate storage boundaries.

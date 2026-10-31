@@ -1,0 +1,24 @@
+{
+  "family": "IBM Plex Sans",
+  "style": "normal",
+  "source": "https://github.com/IBM/plex/tree/master/packages/plex-sans-variable/fonts/complete/woff2",
+  "license": "SIL Open Font License 1.1",
+  "files": [
+    {
+      "file": "ibm-plex-sans-variable.woff2",
+      "sourceFile": "packages/plex-sans-variable/fonts/complete/woff2/IBM Plex Sans Var-Roman.woff2",
+      "downloadUrl": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-sans-variable/fonts/complete/woff2/IBM%20Plex%20Sans%20Var-Roman.woff2",
+      "gitBlobSha1": "59b0bc0a7d9bb903b394065c8d0863b7c97b1115",
+      "sha256": "e978248b6b56da9e372975322a98dd9a51135d1b375e32ed6d5ca69f3aab792d",
+      "bytes": 230368
+    },
+    {
+      "file": "ibm-plex-sans-OFL.txt",
+      "sourceFile": "packages/plex-sans-variable/fonts/complete/woff2/license.txt",
+      "downloadUrl": "https://raw.githubusercontent.com/IBM/plex/master/packages/plex-sans-variable/fonts/complete/woff2/license.txt",
+      "gitBlobSha1": "f72f76504cd73cf2c00b140b2743c138320597b6",
+      "sha256": "91c25c350d3cac39da2736d74f7ba37ef648f5237a4e330a240615bc8d8c4360",
+      "bytes": 4360
+    }
+  ]
+}

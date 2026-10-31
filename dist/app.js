@@ -1,3 +1,4 @@
+import {saveCheckin,saveDeviceReadings} from './data/journal-client.js';
 import {metrics} from './data/metrics.js';
 import {loadWorkspace,emptyWorkspace} from './data/workspace-data.js';
 import {createHealthService} from './data/health-service.js';
@@ -21,6 +22,7 @@ function configureWorkspace(next) {
   ({createInitialState,normalizeState,stateFromSearch,searchFromState,rangeState,toggleSource,scopeFromEvidence}=stateModel);
 }
 configureWorkspace(workspace);
+const journalUI={savingCheckin:false,savingDevice:false,checkinDraft:null,message:''};
 const connectionUI={query:'',category:'all',selectedDevice:null,refreshing:false,bluetooth:null};
 let bluetoothReady=false,bluetoothRender=null;
 const bluetooth=createBluetoothController({onChange:snapshot=>{
@@ -33,12 +35,10 @@ const bluetooth=createBluetoothController({onChange:snapshot=>{
 connectionUI.bluetooth=bluetooth.getSnapshot();
 
 const labels = {overview:'Overview',connect:'Connections',recovery:'Recovery',insights:'Insights',timeline:'Timeline',intelligence:'Intelligence',reports:'Reports',about:'About'};
-const titles = {overview:'Your health, in context.',connect:'Connect your health world.',recovery:'Find the rhythm in your days.',insights:'Patterns, with perspective.',timeline:'Your wellness timeline.',intelligence:'Understand your patterns.',reports:'A record you can take with you.',about:'Clarity you can trace.'};
+const titles = {...labels};
 const descriptions = {overview:'Start with a day. See what surrounds it. Follow every reading to its source.',connect:'Your apps, your devices, and the records that bring them together.',recovery:'Four separate measurements. One shared date. Explore the changes together.',insights:'What changed, what moved together, and what the records can’t tell us.',timeline:'The original observations behind every chart and explanation.',intelligence:'Ask about sleep, steps, resting heart rate, or self-reported energy.',reports:'A neutral summary of the selected records, ready to review or print.',about:'A wellness workspace built around recorded information and transparent calculations.'};
 const questions = ['Summarize sleep and activity patterns.','Compare the earlier and later halves.','What was different on days with lower self-reported energy?','Show the records behind the sleep trend.','Prepare a neutral summary I can discuss with a healthcare professional.'];
-const initialParams=new URLSearchParams(location.search);
-if(initialParams.get('sources')&&!initialParams.get('sources').split(',').some(id=>stateModel.sourceIds.includes(id)))initialParams.delete('sources');
-let state = stateFromSearch(initialParams.toString()), renderedContext = null, version = 0;
+let state = stateFromSearch(location.search), renderedContext = null, version = 0;
 let conversation = [], draft = '', sending = false, requestVersion = 0, evidence = null, evidenceTrigger = null;
 let motion = 'on';
 try {motion = localStorage.getItem('aethriva-motion') || 'on';} catch {}
@@ -124,12 +124,12 @@ async function render({navigation=false,focus=null}={}) {
   try {
     const [summary,comparison,insights,events]=await Promise.all([summarize(filters),comparePeriods(filters),buildInsights(filters),selectEvents(filters)]);
     if(token!==version)return;
-    const ctx={state:snapshot,filters,summary,comparison,insights,sources,events,workspace,connectionUI};
+    const ctx={state:snapshot,filters,summary,comparison,insights,sources,events,workspace,connectionUI,journalUI};
     const renderers={overview:renderOverview,connect:renderConnect,recovery:renderRecovery,insights:renderInsights,timeline:renderTimeline,reports:renderReports,about:renderAbout};
     const content=snapshot.screen==='intelligence'?renderIntelligence():await renderers[snapshot.screen](ctx);
     if(token!==version)return;
     renderedContext=ctx;
-    root.innerHTML=`<div class="app-shell">${header()}<div class="workspace-banner"><span><i></i>${workspace.mode==='local'?'Your health history · On this computer':'Your workspace · Connect a source to begin'}</span><button data-screen="about">About your workspace${icon('arrow',14)}</button></div><main class="workspace" id="main-content" tabindex="-1"><header class="page-header"><div><h1 tabindex="-1" id="page-title">${titles[snapshot.screen]}</h1><p class="page-description">${descriptions[snapshot.screen]}</p></div></header>${snapshot.screen==='connect'?'':toolbar()}${workspace.error?`<section class="workspace-load-notice" role="alert"><div><strong>Your history could not be loaded.</strong><p>${esc(workspace.error)}. Your saved records are unchanged.</p></div><button class="button" data-refresh-workspace>Try again</button></section>`:''}<div class="page-content">${content}</div>${evidenceHtml()}<footer class="app-footer"><span>AETHRIVA · Connected information. Clearer understanding.</span><div><button data-motion id="motion-toggle" aria-pressed="${motion==='off'}">${motion==='on'?'Reduce motion':'Motion reduced'}</button><button data-screen="about">Privacy & limitations</button><a href="https://github.com/coderarush/Bodha" target="_blank" rel="noopener noreferrer">GitHub${icon('arrow',12)}</a></div></footer></main></div>`;
+    root.innerHTML=`<div class="app-shell">${header()}<div class="workspace-banner"><span><i></i>${workspace.mode==='local'?'Your health history · On this computer':'Your workspace · Connect a source to begin'}</span><button data-screen="about">About your workspace${icon('arrow',14)}</button></div><main class="workspace" id="main-content" tabindex="-1"><header class="page-header"><div><h1 tabindex="-1" id="page-title">${titles[snapshot.screen]}</h1><p class="page-description">${descriptions[snapshot.screen]}</p></div></header>${snapshot.screen==='connect'?'':toolbar()}${workspace.cache?.available===false?'<section class="workspace-load-notice provider-unavailable" role="status"><div><strong>Provider history is unavailable.</strong><p>Google Health and Lyfta are not included in this view. Your saved local records remain available.</p></div><a class="button" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open Health app</a></section>':''}${workspace.error?`<section class="workspace-load-notice" role="alert"><div><strong>Your history could not be loaded.</strong><p>${esc(workspace.error)}. Your saved records are unchanged.</p></div><button class="button" data-refresh-workspace>Try again</button></section>`:''}<div class="page-content">${content}</div>${evidenceHtml()}<footer class="app-footer"><span>AETHRIVA · Connected information. Clearer understanding.</span><div><button data-motion id="motion-toggle" aria-pressed="${motion==='off'}">${motion==='on'?'Reduce motion':'Motion reduced'}</button><button data-screen="about">Privacy & limitations</button><a href="https://github.com/coderarush/Bodha" target="_blank" rel="noopener noreferrer">GitHub${icon('arrow',12)}</a></div></footer></main></div>`;
     document.title=`${labels[snapshot.screen]} · AETHRIVA`;
     document.documentElement.dataset.screen=snapshot.screen;
     for(const menu of root.querySelectorAll('.scope-toolbar details'))if(openMenus.includes(menu.className))menu.open=true;
@@ -142,7 +142,7 @@ async function render({navigation=false,focus=null}={}) {
   }
 }
 async function update(next,{navigation=false,replace=false,focus=focusDescriptor()}={}) {
-  state=normalizeState({...state,...next});evidence=null;writeUrl(replace);
+  state=normalizeState({...state,...next});journalUI.devicePage=0;evidence=null;writeUrl(replace);
   await render({navigation,focus});
   if(!navigation){if(next.selectedDate)announce(`${formatDate(state.selectedDate)} selected. Readings updated.`);else if(next.plotMetric)announce(`Showing the ${metricLabel(state.plotMetric).toLowerCase()} trend. All other measurements keep their filters.`);else announce(`${renderedContext?.summary.coverage.records??0} records in the selected scope.`);}
 }
@@ -181,6 +181,28 @@ async function refreshWorkspace(){
   const currentScreen=state.screen;configureWorkspace(next);state={...createInitialState(),screen:currentScreen};writeUrl(true);
   await render({focus:{id:'page-title'}});toast(next.available?'History refreshed. Previous answers cleared so every finding uses the current records.':'Open your local workspace to load saved health history.');
 }
+function applyJournalWorkspace(next,{sourceId,date}={}) {
+  const previous={...state},previousSources=state.sourceIds;
+  configureWorkspace(next);requestVersion++;sending=false;conversation=[];draft='';evidence=null;
+  const nextSources=sourceId?[...new Set([...previousSources,sourceId])]:previousSources;
+  state=normalizeState({...previous,sourceIds:nextSources,metricKey:'all',...(date?{selectedDate:date,from:[previous.from,date].sort()[0],to:[previous.to,date].sort().at(-1)}:{})});writeUrl(true);
+}
+async function storeCheckin(form){
+  if(journalUI.savingCheckin)return;
+  const input=new FormData(form),date=String(input.get('date')),energy=Number(input.get('energy'));
+  journalUI.checkinDraft={date,energy};journalUI.savingCheckin=true;journalUI.message='Saving check-in…';await render();
+  try{const result=await saveCheckin({date,energy});applyJournalWorkspace(result.workspace,{sourceId:'checkins',date});journalUI.checkinDraft=null;journalUI.message='Check-in saved. Your energy trend and findings have been updated.';toast('Check-in saved. Previous answers cleared to keep the evidence current.');}
+  catch(error){journalUI.message=error.message;toast(error.message);}
+  finally{journalUI.savingCheckin=false;await render({focus:{id:'checkin-energy'}});}
+}
+async function storeDeviceReadings(){
+  if(journalUI.savingDevice)return;
+  const snapshot=bluetooth.getSnapshot();if(!snapshot.samples.length)return;
+  journalUI.savingDevice=true;await render();
+  try{const result=await saveDeviceReadings({device:{name:snapshot.device?.name||'Bluetooth health monitor'},samples:snapshot.samples});applyJournalWorkspace(result.workspace,{sourceId:'bluetooth'});toast(`${result.inserted} readings saved to your local history${result.duplicates?`; ${result.duplicates} already saved`:''}.`);}
+  catch(error){toast(error.message);}
+  finally{journalUI.savingDevice=false;await render({focus:{id:'save-device-readings'}});}
+}
 function downloadReadings(){
   const snapshot=bluetooth.getSnapshot(),samples=snapshot.samples||[];if(!samples.length)return;
   const cell=value=>'"'+String(value??'').replaceAll('"','""')+'"';
@@ -194,10 +216,13 @@ document.addEventListener('click',async event=>{
   if(!event.target.closest('.scope-toolbar details'))closeScopeMenus();
   const button=event.target.closest('button');if(!button||button.disabled)return;
   if(button.dataset.connectionJump){const target=document.getElementById(button.dataset.connectionJump);if(target){target.tabIndex=-1;target.focus();target.scrollIntoView({behavior:scrollBehavior(),block:'start'});}return;}
+  if(button.hasAttribute('data-reading-page')){journalUI.devicePage=Math.max(0,Number(button.dataset.readingPage)||0);await render();document.getElementById('saved-device-title')?.scrollIntoView({behavior:scrollBehavior(),block:'start'});return;}
   if(button.hasAttribute('data-refresh-workspace')){await refreshWorkspace();return;}
   if(button.dataset.bluetoothProfile){await bluetooth.connect({profile:button.dataset.bluetoothProfile});return;}
   if(button.hasAttribute('data-bluetooth-connect')){const entry=deviceCatalog.find(item=>item.id===button.dataset.bluetoothConnect);await bluetooth.connect(entry);return;}
   if(button.hasAttribute('data-bluetooth-disconnect')){bluetooth.disconnect();return;}
+  if(button.hasAttribute('data-save-device-readings')){await storeDeviceReadings();return;}
+  if(button.hasAttribute('data-view-device-readings')){await update({...createInitialState(),screen:'timeline',sourceIds:['bluetooth'],metricKey:'all'},{navigation:true});return;}
   if(button.hasAttribute('data-bluetooth-download')){downloadReadings();return;}
   if(button.dataset.deviceId){connectionUI.selectedDevice=button.dataset.deviceId;await render();const detail=document.getElementById('device-detail');detail?.focus();detail?.scrollIntoView({behavior:scrollBehavior(),block:'center'});return;}
   if(button.hasAttribute('data-device-close')){const id=connectionUI.selectedDevice;connectionUI.selectedDevice=null;await render();root.querySelector(`[data-device-id="${CSS.escape(id)}"]`)?.focus();return;}
@@ -224,8 +249,9 @@ document.addEventListener('change',async event=>{
   if(event.target.matches('input[name="source"]'))await update(toggleSource(state,event.target.value,event.target.checked));
   if(event.target.matches('[data-selected-day]')){if(event.target.validity.valid)await update({selectedDate:event.target.value});else{event.target.reportValidity();}}
 });
-document.addEventListener('input',event=>{if(event.target.id==='device-search'){connectionUI.query=event.target.value;connectionUI.selectedDevice=null;const position=event.target.selectionStart;clearTimeout(searchTimer);searchTimer=setTimeout(async()=>{await render({focus:{id:'device-search'}});const input=document.getElementById('device-search');try{input?.setSelectionRange(position,position);}catch{}},120);}if(event.target.id==='question-input'){draft=event.target.value;document.getElementById('ask-button').disabled=sending||!draft.trim();}});
+document.addEventListener('input',event=>{if(['checkin-date','checkin-energy'].includes(event.target.id)){journalUI.checkinDraft={date:document.getElementById('checkin-date').value,energy:document.getElementById('checkin-energy').value};}if(event.target.id==='device-search'){connectionUI.query=event.target.value;connectionUI.selectedDevice=null;const position=event.target.selectionStart;clearTimeout(searchTimer);searchTimer=setTimeout(async()=>{await render({focus:{id:'device-search'}});const input=document.getElementById('device-search');try{input?.setSelectionRange(position,position);}catch{}},120);}if(event.target.id==='question-input'){draft=event.target.value;document.getElementById('ask-button').disabled=sending||!draft.trim();}});
 document.addEventListener('submit',async event=>{
+  if(event.target.id==='energy-checkin-form'){event.preventDefault();await storeCheckin(event.target);return;}
   if(event.target.id==='question-form'){event.preventDefault();await ask(document.getElementById('question-input').value);}
   if(event.target.id==='custom-range'){event.preventDefault();const form=new FormData(event.target),from=form.get('from'),to=form.get('to');if(from>to){toast('Choose an end date on or after the start date.');return;}closeScopeMenus();await update({from,to},{focus:{id:'date-toggle'}});}
 });

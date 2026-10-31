@@ -17,6 +17,17 @@ function dataset() {
   return {version:1,mode:'local',profile:{name:'Local workspace',initials:'LW'},sources:[source],events,workouts:[],range:{from:'2025-11-01',to:'2025-12-10'},importedAt:'2025-12-11T12:00:00Z',notices:[]};
 }
 
+function deviceReading(sample={}) {
+  return {id:'device_1',sourceId:'bluetooth',deviceName:'Personal monitor',receivedAt:'2025-11-02T20:00:01Z',sample:{kind:'heart_rate',bpm:72,unit:'bpm',timestamp:'2025-11-02T20:00:00Z',contactSupported:true,contactDetected:true,energyExpendedKJ:null,rrIntervalsSeconds:[],qualityWarnings:[],usable:true,rejectionReason:null,...sample}};
+}
+
+function deviceDataset(reading=deviceReading()) {
+  const data=dataset();
+  data.sources.push({id:'bluetooth',name:'Bluetooth devices',sourceType:'wearable',status:'disconnected',metricKeys:[],isSynthetic:false});
+  data.deviceReadings=[reading];
+  return data;
+}
+
 test('public first-run is an empty current-date workspace without sample records', async () => {
   const {emptyWorkspace} = await runtime('data/workspace-data.js');
   const data = emptyWorkspace({now:'2027-01-02T04:00:00Z'});
@@ -25,7 +36,79 @@ test('public first-run is an empty current-date workspace without sample records
   assert.deepEqual(data.events,[]);
   assert.deepEqual(data.sources,[]);
   assert.deepEqual(data.workouts,[]);
+  assert.deepEqual(data.deviceReadings,[]);
   assert.equal(data.available,false);
+});
+
+test('device readings retain spot measurements and quality without entering daily analytics', async () => {
+  const {validateWorkspace}=await runtime('data/workspace-data.js');
+  const {createHealthService}=await runtime('data/health-service.js');
+  const input=deviceDataset(deviceReading({bpm:0,contactDetected:false,qualityWarnings:[],secret:'discard me'}));
+  const valid=validateWorkspace(input);
+  assert.equal(valid.deviceReadings.length,1);
+  assert.equal(valid.deviceReadings[0].sample.bpm,0);
+  assert.match(valid.deviceReadings[0].sample.qualityWarnings.join(' '),/contact/i);
+  assert.equal(valid.deviceReadings[0].sample.secret,undefined);
+  input.deviceReadings[0].sample.bpm=100;
+  input.deviceReadings[0].sample.rrIntervalsSeconds.push(1);
+  assert.equal(valid.deviceReadings[0].sample.bpm,0);
+  assert.deepEqual(valid.deviceReadings[0].sample.rrIntervalsSeconds,[]);
+  const summary=await createHealthService(valid).summarize();
+  assert.equal(summary.coverage.records,40);
+  assert.equal(summary.seriesByMetric.resting_heart_rate.every(point=>point.value===null),true);
+});
+
+test('device validation preserves nullable pressure, sensor status and decoder metadata', async () => {
+  const {validateDeviceReading}=await runtime('data/workspace-data.js');
+  const pressure=validateDeviceReading(deviceReading({kind:'blood_pressure',bpm:undefined,unit:'mmHg',systolic:null,diastolic:80,meanPressure:null,pulseRate:0,deviceTimestamp:'2025-11-02T12:00:00',userId:0,measurementStatus:3}));
+  assert.equal(pressure.sample.systolic,null);
+  assert.equal(pressure.sample.pulseRate,0);
+  assert.equal(pressure.sample.userId,0);
+  assert.equal(pressure.sample.measurementStatus,3);
+  assert.equal(pressure.sample.deviceTimestamp,'2025-11-02T12:00:00');
+  assert.match(pressure.sample.qualityWarnings.join(' '),/movement.*loose.*unavailable/i);
+  const plx=validateDeviceReading(deviceReading({kind:'pulse_oximeter',bpm:undefined,unit:'%',mode:'continuous',spo2:null,pulseRate:68,measurementStatus:1<<14,deviceSensorStatus:1<<11,pulseAmplitudeIndex:0,deviceTimestamp:null,fast:{spo2:98,pulseRate:69},slow:null}));
+  assert.equal(plx.sample.spo2,null);
+  assert.equal(plx.sample.pulseAmplitudeIndex,0);
+  assert.deepEqual(plx.sample.fast,{spo2:98,pulseRate:69});
+  assert.equal(plx.sample.slow,null);
+  assert.match(plx.sample.qualityWarnings.join(' '),/questionable.*contact.*unavailable/i);
+});
+
+test('device validation rejects forged quality flags and invalid or missing measurements', async () => {
+  const {validateDeviceReading,validateWorkspace}=await runtime('data/workspace-data.js');
+  for(const mutate of [
+    r=>{r.sourceId='google-health';},r=>{r.isSynthetic=true;},r=>{r.sample.isSynthetic=true;},
+    r=>{r.sample.kind='resting_heart_rate';},r=>{r.sample.bpm=Infinity;},r=>{r.sample.bpm=-1;},r=>{r.sample.bpm=null;},
+    r=>{r.sample.bpm=72.5;},r=>{r.sample.unit='Hz';},r=>{r.sample.usable=false;},
+    r=>{r.sample.rejectionReason='Rejected by monitor';},r=>{r.sample.timestamp='2025-02-30T20:00:00Z';},
+    r=>{r.sample.timestamp='2025-11-02T20:00:02Z';},r=>{r.receivedAt='bad date';},
+    r=>{r.sample.rrIntervalsSeconds=[-1];},r=>{r.sample.contactSupported=false;},
+    r=>{Object.assign(r.sample,{kind:'blood_pressure',unit:'mmHg',systolic:null,diastolic:null,meanPressure:null,pulseRate:null});},
+    r=>{Object.assign(r.sample,{kind:'blood_pressure',unit:'mmHg',systolic:120,measurementStatus:65536});},
+    r=>{Object.assign(r.sample,{kind:'blood_pressure',unit:'mmHg',systolic:120,deviceTimestamp:'2025-02-30T12:00:00'});},
+    r=>{Object.assign(r.sample,{kind:'pulse_oximeter',unit:'%',mode:'spot-check',spo2:null,pulseRate:null});},
+    r=>{Object.assign(r.sample,{kind:'pulse_oximeter',unit:'%',mode:'spot-check',spo2:98,pulseRate:60,deviceSensorStatus:16777216});},
+    ...[10,11,13,15].map(bit=>r=>{Object.assign(r.sample,{kind:'pulse_oximeter',unit:'%',mode:'spot-check',spo2:98,pulseRate:60,measurementStatus:1<<bit,usable:true,qualityWarnings:[]});}),
+  ]) {const reading=deviceReading();mutate(reading);assert.throws(()=>validateDeviceReading(reading));}
+  for(const mutate of [
+    d=>{d.sources[1].metricKeys=['resting_heart_rate'];},
+    d=>{d.deviceReadings.push(d.deviceReadings[0]);},
+    d=>{d.deviceReadings[0].id=d.events[0].id;},
+    d=>{d.range.from='2025-11-03';d.events=d.events.slice(2);},
+    d=>{d.deviceReadings=Array(10001).fill(d.deviceReadings[0]);},
+  ]) {const data=deviceDataset();mutate(data);assert.throws(()=>validateWorkspace(data));}
+});
+
+test('canonical check-ins retain energy provenance and only advertise energy',async()=>{
+  const {validateWorkspace}=await runtime('data/workspace-data.js');
+  const data=dataset();
+  data.sources.push({id:'checkins',name:'Energy check-ins',sourceType:'manual',status:'ready',metricKeys:['energy'],isSynthetic:false});
+  data.events.push({...data.events[1],id:'energy_1',sourceId:'checkins',sourceRecordId:'checkin_1',metricKey:'energy',metricLabel:'Self-reported energy',category:'wellness_checkin',value:7,unit:'/10',originalValue:7,originalUnit:'/10',metadata:{isSynthetic:false,checkInId:'checkin_1'},provenance:{sourceName:'Energy check-ins',sourceType:'manual',importBatchId:'journal',transformationVersion:'1'}});
+  const valid=validateWorkspace(data);
+  assert.equal(valid.events.at(-1).metadata.checkInId,'checkin_1');
+  data.sources.at(-1).metricKeys.push('steps');
+  assert.throws(()=>validateWorkspace(data));
 });
 
 test('workspace validation preserves zero and original normalized-value provenance', async () => {
@@ -89,6 +172,23 @@ test('loader distinguishes public absence from bridge errors and never uses demo
   assert.equal(data.available,true);assert.equal(data.events.length,40);
 });
 
+test('loader explains safe backend failures and bounds its network request',async()=>{
+  const {loadWorkspace}=await runtime('data/workspace-data.js');
+  let requestSignal;
+  const safe=await loadWorkspace({fetchImpl:async(url,options)=>{
+    requestSignal=options.signal;
+    return new Response(JSON.stringify({error:'The local journal could not be read. Restart the local server.'}),{status:503,headers:{'Content-Type':'application/json'}});
+  }});
+  assert.ok(requestSignal instanceof AbortSignal);
+  assert.match(safe.error,/local journal.*Restart/);
+  const unsafe=await loadWorkspace({fetchImpl:async()=>new Response(JSON.stringify({error:'Failed reading /Users/private/person/data.json <script>secret</script>'}),{status:503})});
+  assert.match(unsafe.error,/503/);
+  assert.doesNotMatch(unsafe.error,/Users|private|person|script|data.json/);
+  const timeout=await loadWorkspace({fetchImpl:async()=>{throw new DOMException('Signal timed out','TimeoutError');}});
+  assert.match(timeout.error,/timed out.*try again/i);
+  assert.equal(timeout.available,false);
+});
+
 test('real service retains complete input evidence and snapshot isolation', async () => {
   const {createHealthService} = await runtime('data/health-service.js');
   const input=dataset(), service=createHealthService(input);
@@ -150,6 +250,18 @@ test('workspace state defaults to latest available 30 days and retains empty sou
   assert.deepEqual(stateApi.stateFromSearch(stateApi.searchFromState(none)),none);
   const changed=stateApi.normalizeState({...state,from:'2025-11-01',to:'2025-11-02',selectedDate:'2025-12-10'});
   assert.equal(changed.selectedDate,'2025-11-02');
+});
+
+test('workspace state includes ready and historical device sources after disconnection',async()=>{
+  const {createWorkspaceState}=await runtime('workspace-state.js');
+  const data=deviceDataset();
+  data.sources.push({id:'checkins',name:'Energy check-ins',sourceType:'manual',status:'ready',metricKeys:['energy'],isSynthetic:false});
+  data.sources.push({id:'unused',name:'Unused source',sourceType:'file',status:'not_connected',metricKeys:[],isSynthetic:false});
+  const api=createWorkspaceState(data);
+  assert.deepEqual(api.createInitialState().sourceIds,['google-health','bluetooth','checkins']);
+  const selected=api.stateFromSearch('?sources=bluetooth&metric=all');
+  assert.deepEqual(selected.sourceIds,['bluetooth']);
+  assert.equal(selected.metricKey,'all');
 });
 
 test('runtime module graph does not import the demo fixture or legacy wrappers', async () => {

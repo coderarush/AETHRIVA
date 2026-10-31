@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-31T01:02:44.975751+00:00",
+  "generatedAt": "2026-10-31T01:51:18.621893+00:00",
   "title": "Design System: AETHRIVA",
   "extensions": {
     "colorMeta": {
@@ -104,11 +104,31 @@
     "typographyMeta": {
       "display": {
         "displayName": "Page heading",
-        "purpose": "Main page title: 40px desktop, 34px below 800px, 32px below 600px."
+        "purpose": "30px/1.25 at weight 600; 28px below 600px. Normal tracking."
+      },
+      "headline": {
+        "displayName": "Section heading",
+        "purpose": "22px/1.3 at weight 600."
+      },
+      "title": {
+        "displayName": "Component heading",
+        "purpose": "18px/1.4 at weight 600."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "16px reading base with 1.65 line height, including on phones; contextual sizes documented in DESIGN.md."
+        "purpose": "16px/1.6 at weight 400, including on phones. Prose uses a 65\u201375ch measure."
+      },
+      "label": {
+        "displayName": "Control and label",
+        "purpose": "14px at weight 500. Interactive controls retain 44px minimum height."
+      },
+      "metadata": {
+        "displayName": "Minor metadata",
+        "purpose": "13px/1.5 at weight 400. Chart axes remain 14px."
+      },
+      "reading": {
+        "displayName": "Primary reading",
+        "purpose": "36px/1.15 at weight 600; 30px on phones. Tabular numerals, complete units, and -.015em tracking."
       }
     },
     "shadows": [
@@ -188,7 +208,7 @@
       "method": "Code-led refresh of the current implementation. This documentation pass performed no new browser assessment; verification evidence is maintained separately in docs/VERIFICATION.md.",
       "tonalRamps": "Omitted: no source tonal ramps; actual-token scope excludes synthesized palettes.",
       "motionAccessibility": "The OS reduced-motion preference and user toggle disable transitions/animations and programmatic smooth scrolling.",
-      "previewLimits": "Self-contained style previews use source CSS values and live custom properties with literal fallbacks. They do not wire navigation, questions, or evidence; Nunito requires the bundled application font."
+      "previewLimits": "Self-contained style previews use source CSS values and live custom properties with literal fallbacks. They do not wire navigation, questions, or evidence; IBM Plex Sans requires the bundled application font."
     }
   },
   "components": [
@@ -197,7 +217,7 @@
       "kind": "button",
       "refersTo": "button-primary",
       "html": "<button class=\"ds-primary\">Explore your patterns</button>",
-      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:700 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:var(--accent,#86b0ff);color:var(--on-accent,#10203c);border-color:transparent}.ds-primary:hover{background:#a1c2ff}.ds-primary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:500 14px/1.4 \"IBM Plex Sans\",system-ui,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:var(--accent,#86b0ff);color:var(--on-accent,#10203c);border-color:transparent}.ds-primary:hover{background:#a1c2ff}.ds-primary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Filled main action with a 44px minimum height."
     },
     {
@@ -205,7 +225,7 @@
       "kind": "button",
       "refersTo": "button-secondary",
       "html": "<button class=\"ds-secondary\">Explore demo sources</button>",
-      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:700 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:none}.ds-secondary:hover{background:var(--hover,#252e3d);border-color:var(--accent,#86b0ff)}.ds-secondary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:500 14px/1.4 \"IBM Plex Sans\",system-ui,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:none}.ds-secondary:hover{background:var(--hover,#252e3d);border-color:var(--accent,#86b0ff)}.ds-secondary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Outlined supporting action."
     },
     {
@@ -213,14 +233,14 @@
       "kind": "input",
       "refersTo": "field",
       "html": "<input class=\"ds-field\" type=\"date\" aria-label=\"Start date\" value=\"2026-10-01\">",
-      "css": ".ds-field{background:var(--input,#12161c);color:var(--text,#f2f5fb);border:1px solid var(--control-line,#63758f);border-radius:8px;padding:9px 12px;max-width:100%;min-height:44px;font:450 14px/1.65 Nunito,sans-serif;color-scheme:dark}.ds-field:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "css": ".ds-field{background:var(--input,#12161c);color:var(--text,#f2f5fb);border:1px solid var(--control-line,#63758f);border-radius:8px;padding:9px 12px;max-width:100%;min-height:44px;font:400 14px/1.6 \"IBM Plex Sans\",system-ui,sans-serif;color-scheme:dark}.ds-field:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Inset date input with visible focus."
     },
     {
       "name": "Navigation",
       "kind": "nav",
       "html": "<nav class=\"ds-nav-list\" aria-label=\"Demo views\"><button class=\"ds-nav\" aria-current=\"page\">Overview</button><button class=\"ds-nav\">Recovery</button><button class=\"ds-nav\">Intelligence</button></nav>",
-      "css": ".ds-nav-list{display:flex;flex-direction:column;gap:6px;max-width:196px;background:var(--nav,#13161b);padding:18px}.ds-nav{display:flex;align-items:center;gap:12px;min-height:46px;padding:10px 13px;background:none;border:0;border-radius:8px;color:var(--secondary,#b8c3d2);font:650 14px/1.65 Nunito,sans-serif;cursor:pointer;text-align:left;white-space:nowrap;transition:background .18s cubic-bezier(.16,1,.3,1),color .18s cubic-bezier(.16,1,.3,1)}.ds-nav:hover{background:var(--hover,#252e3d);color:var(--text,#f2f5fb)}.ds-nav[aria-current=page]{background:var(--selection,#233755);color:#b8d1ff}.ds-nav:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}@media(max-width:1199px){.ds-nav-list{flex-direction:row;max-width:100%;overflow-x:auto;gap:4px}.ds-nav{min-height:42px;padding:8px 12px;flex:none}}",
+      "css": ".ds-nav-list{display:flex;flex-direction:column;gap:6px;max-width:196px;background:var(--nav,#13161b);padding:18px}.ds-nav{display:flex;align-items:center;gap:12px;min-height:46px;padding:10px 13px;background:none;border:0;border-radius:8px;color:var(--secondary,#b8c3d2);font:500 14px/1.6 \"IBM Plex Sans\",system-ui,sans-serif;cursor:pointer;text-align:left;white-space:nowrap;transition:background .18s cubic-bezier(.16,1,.3,1),color .18s cubic-bezier(.16,1,.3,1)}.ds-nav:hover{background:var(--hover,#252e3d);color:var(--text,#f2f5fb)}.ds-nav[aria-current=page]{background:var(--selection,#233755);color:#b8d1ff}.ds-nav:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}@media(max-width:1199px){.ds-nav-list{flex-direction:row;max-width:100%;overflow-x:auto;gap:4px}.ds-nav{min-height:44px;padding:8px 12px;flex:none}}",
       "description": "Vertical desktop route rail; a horizontal scrolling route row below 1200px."
     },
     {
@@ -228,7 +248,7 @@
       "kind": "chip",
       "refersTo": "chip",
       "html": "<span class=\"ds-chip\">Synthetic data</span>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;max-width:100%;border-radius:5px;background:var(--chip,#233149);padding:4px 9px;font:700 12px/1.5 Nunito,sans-serif;color:#c7daff;overflow-wrap:anywhere}",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;max-width:100%;border-radius:5px;background:var(--chip,#233149);padding:4px 9px;font:500 13px/1.5 \"IBM Plex Sans\",system-ui,sans-serif;color:#c7daff;overflow-wrap:anywhere}",
       "description": "Non-interactive compact annotation; no hover state in source."
     },
     {
@@ -236,14 +256,14 @@
       "kind": "card",
       "refersTo": "panel",
       "html": "<section class=\"ds-panel\"><h2>What the records show</h2><p>Descriptive observations, with the inputs close at hand.</p></section>",
-      "css": ".ds-panel{background:var(--surface,#1a1e24);color:var(--text,#f2f5fb);padding:28px;border-radius:14px;min-width:0;font:450 16px/1.65 Nunito,sans-serif}.ds-panel h2{margin:0 0 16px;font-size:25px;font-weight:750;line-height:1.25;letter-spacing:-.025em}.ds-panel p{margin:0;color:var(--secondary,#b8c3d2);max-width:72ch}@media(max-width:600px){.ds-panel{padding:22px 18px}}",
+      "css": ".ds-panel{background:var(--surface,#1a1e24);color:var(--text,#f2f5fb);padding:28px;border-radius:14px;min-width:0;font:400 16px/1.6 \"IBM Plex Sans\",system-ui,sans-serif}.ds-panel h2{margin:0 0 16px;font-size:22px;font-weight:600;line-height:1.3;letter-spacing:normal}.ds-panel p{margin:0;color:var(--secondary,#b8c3d2);max-width:72ch}@media(max-width:600px){.ds-panel{padding:22px 18px}}",
       "description": "Static tonal content surface; no hover state in source."
     },
     {
       "name": "Inline evidence action",
       "kind": "button",
       "html": "<button class=\"ds-evidence\">Trace this finding</button>",
-      "css": ".ds-evidence{display:inline-flex;align-items:center;justify-content:flex-start;min-height:40px;padding:8px 0;background:none;border:0;color:var(--accent,#86b0ff);font:700 14px/1.5 Nunito,sans-serif;text-align:left;cursor:pointer}.ds-evidence:hover{text-decoration:underline;text-underline-offset:4px}.ds-evidence:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "css": ".ds-evidence{display:inline-flex;align-items:center;justify-content:flex-start;min-height:44px;padding:8px 0;background:none;border:0;color:var(--accent,#86b0ff);font:500 14px/1.5 \"IBM Plex Sans\",system-ui,sans-serif;text-align:left;cursor:pointer}.ds-evidence:hover{text-decoration:underline;text-underline-offset:4px}.ds-evidence:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Opens focusable evidence within the page; this preview demonstrates styling only."
     },
     {
@@ -251,13 +271,13 @@
       "kind": "card",
       "refersTo": "sleep-reading",
       "html": "<section class=\"ds-reading\"><h3>Sleep duration</h3><p>7h 30m</p><span>Oct 30 \u00b7 Synthetic demonstration</span><button>Evidence</button></section>",
-      "css": ".ds-reading{display:flex;flex-direction:column;align-items:flex-start;gap:14px;background:var(--sleep-panel,#ded3ff);color:#182027;min-width:0;padding:22px;border-radius:14px;font:450 16px/1.65 Nunito,sans-serif}.ds-reading h3{margin:0;font-size:15px;font-weight:700;line-height:1.4;color:#29333e}.ds-reading p{margin:0;font-size:clamp(29px,3vw,42px);line-height:1.12;font-weight:750;letter-spacing:-.035em;font-variant-numeric:tabular-nums}.ds-reading>span{font-size:12px;color:#37414a}.ds-reading button{min-height:44px;padding:7px 0;background:transparent;border:0;color:#26313c;font:750 14px/1.35 Nunito,sans-serif;cursor:pointer}.ds-reading button:hover{color:#07111b;text-decoration:underline;text-underline-offset:4px}.ds-reading button:focus-visible{outline:2px solid #26313c;outline-offset:4px}@media(max-width:560px){.ds-reading{padding:15px 12px;border-radius:12px}.ds-reading p{font-size:clamp(24px,6.8vw,32px)}.ds-reading button{min-height:38px}}",
+      "css": ".ds-reading{display:flex;flex-direction:column;align-items:flex-start;gap:14px;background:var(--sleep-panel,#ded3ff);color:#182027;min-width:0;padding:22px;border-radius:14px;font:400 16px/1.6 \"IBM Plex Sans\",system-ui,sans-serif}.ds-reading h3{margin:0;font-size:14px;font-weight:500;line-height:1.4;color:#29333e}.ds-reading p{margin:0;font-size:36px;line-height:1.15;font-weight:600;letter-spacing:-.015em;font-variant-numeric:tabular-nums}.ds-reading>span{font-size:13px;color:#37414a}.ds-reading button{min-height:44px;padding:7px 0;background:transparent;border:0;color:#26313c;font:500 14px/1.35 \"IBM Plex Sans\",system-ui,sans-serif;cursor:pointer}.ds-reading button:hover{color:#07111b;text-decoration:underline;text-underline-offset:4px}.ds-reading button:focus-visible{outline:2px solid #26313c;outline-offset:4px}@media(max-width:560px){.ds-reading{padding:15px 12px;border-radius:12px}.ds-reading p{font-size:30px}.ds-reading button{min-height:44px}}",
       "description": "One of four selected-day panels: lavender sleep, peach steps, blue resting heart rate, mint energy. Dark ink and complete units stay readable on pastel surfaces; preview shows an actual fixture reading."
     }
   ],
   "narrative": {
-    "northStar": "Carbon + Nunito",
-    "overview": "A dark, calm evidence workspace with rounded Nunito typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it. All observations and import details are synthetic; Intelligence calculates locally.",
+    "northStar": "Carbon + IBM Plex Sans",
+    "overview": "A dark, calm evidence workspace with precise IBM Plex Sans typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it. All observations and import details are synthetic; Intelligence calculates locally.",
     "keyCharacteristics": [
       "Carbon navigation rail on desktop; horizontally scrolling routes below 1200px.",
       "Four pastel reading panels with dark ink and complete units.",

@@ -1,21 +1,21 @@
-# Current release verification
+# Local functional dashboard verification
 
 Verified October 30, 2026 (Pacific time).
 
-- `npm test`: 82 passing tests, no failures. Includes daily mappings, real dataset validation, missing versus zero, non-October dates, snapshot evidence, catalog search, protocol decoding, disconnect/cancellation, sensor quality rejection, and local HTTP access boundaries.
-- `npm run check`: syntax and explicit asset checks pass for all 22 static runtime files.
-- `git diff --check`: passes.
-- Independent code review: material findings fixed and rechecked. Invalid/test/demo pulse-oximeter packets cannot become observations; malformed Lyfta labels or RIR cannot discard otherwise valid history. CSV retains sensor status and quality warnings.
-- Independent visual review: ship for Connections desktop (1440px) and phone (390px) captures. Keyboard styles and lower sections also source-reviewed.
-- Browser: seven real-data views at 320, 390, 768, and 1440 CSS pixels (28 checks), with no page overflow, render-error state, fictional profile, or demo copy.
-- Browser: seven empty public views at 390 and 1440 CSS pixels (14 checks), with no page overflow or render failures.
-- Browser: EKG aliases return ECG products; selecting a Kardia model displays the manufacturer path and does not fake a connection.
-- Browser: real-data summary produces evidence-backed findings; inline evidence uses daily-aggregate precision. Changing the range preserves the saved answer scope. A conflicting measurement filter is cleared when opening Lyfta workouts, whose exercises and sets expand inline.
-- Authorized local history validated end-to-end without saving its contents into the repository or public assets. Original application and installed synchronization service are unchanged.
-- Static runtime has no synthetic fixture imports. Synthetic regression fixtures live only under `tests/fixtures/`.
+- Full regression suite: **104 tests pass**, no failures. Includes immutable analytics/evidence, missing versus zero, dates, device protocol quality, local journal writes and restart persistence, deduplication, request/body/origin limits, cache degradation, provider-cache alias protection and field validation.
+- `npm run check`: passes all 26 static runtime files. `git diff --check`: passes.
+- Running local operational status: ready; provider cache available and private journal available. Google Health/Lyfta authorization and synchronization remain with the existing Health app.
+- Backend storage gates passed before the typography pass began. No QA observations were written into the user's real journal or provider database.
+- Isolated browser round trip: form submission -> API -> SQLite -> energy trend; after reload the saved rating is retained. Device fixture appears in Timeline and Reports with its original pressure units and movement warning. Provider-unavailable warning remains visible in the interface and report. These tests use a separate temporary database.
+- Browser: all seven main views at 320, 390, 768, 1024 and 1440 CSS pixels (35 checks) load IBM Plex Sans without page or reading overflow or render-error states. Console contains no application errors/warnings in tested flows.
+- Browser: removed-source bookmark stays empty rather than expanding to all private sources. Reset restores current sources; saved answer evidence resolves and receives keyboard focus.
+- IBM Plex Sans loads locally. Computed desktop h1 is 30px/600; mobile is 28px. Body/tables16px, controls14px, metadata13px, consistent400/500/600 weights. Placeholder source contrast exceeds9:1.
+- Independent code review identified four issues: hidden provider outages, report counts excluding non-daily records, edits possible while a check-in saves, and failure after a write committed against a corrupt existing journal. Fixes are covered by availability/report, disabled-field and preflight regression tests.
+- Typography was independently audited and implemented; desktop/mobile Connections captures were inspected. The mechanical design scan reports advisory items only (no non-advisory findings).
+- Reports include selected workouts, check-ins and device readings with reconciled source/day counts. Printable workout details are expanded; device tables paginate interactively but retain the full selected set for print.
 
-## Limits of this verification
+## Actual boundaries
 
-No physical Bluetooth monitor was paired. Packet/parser and lifecycle tests use explicitly synthetic test inputs; they do not establish compatibility with a particular model, firmware, or operating system. ECG, proprietary CGM/device protocols, and manufacturer cloud integrations are not implemented. Bluetooth samples stay in page memory (latest 120 by default) and can be downloaded; they are not persisted into the health-history database. The public Site has no personal-data backend or account system. Private history is available through the local workspace. Print styling was retained, but a new printed PDF was not visually reviewed.
+The current finished scope is the **local workspace**, as requested. The public Site serves the interface, empty first run and supported browser connection flow; it has no personal-data backend or private account system. Private records and the journal are excluded from Git and deployment. The original provider database remains read-only.
 
-The Impeccable detector reported advisory palette/type additions for the Connections component; the visual reviewer found no material issues in the captured views. Previous demo/UI release verification is retained in Git history.
+No physical Bluetooth device was paired during verification. Standard Heart Rate, Blood Pressure and Pulse Oximeter protocol/lifecycle tests do not establish compatibility with every model/firmware/browser. ECG, proprietary glucose/device protocols and manufacturer cloud integrations remain separate implementation work. PDF print rendering and every operating-system/browser combination have not been visually validated.

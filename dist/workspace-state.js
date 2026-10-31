@@ -7,8 +7,8 @@ export function createWorkspaceState(dataset) {
   const bounds={...dataset.range};
   if(!validDate(bounds.from)||!validDate(bounds.to)||bounds.from>bounds.to)throw new Error('Invalid workspace bounds');
   // Historical records remain selectable after a connector disconnects.
-  const historical=new Set([...(dataset.events||[]),...(dataset.workouts||[])].map(record=>record.sourceId));
-  const sourceIds=dataset.sources.filter(source=>source.status==='connected'||historical.has(source.id)).map(source=>source.id);
+  const historical=new Set([...(dataset.events||[]),...(dataset.workouts||[]),...(dataset.deviceReadings||[])].map(record=>record.sourceId));
+  const sourceIds=dataset.sources.filter(source=>['connected','ready'].includes(source.status)||historical.has(source.id)).map(source=>source.id);
   const defaultFrom=[bounds.from,offsetDate(bounds.to,-29)].sort().at(-1);
   const createInitialState=()=>({screen:'overview',from:defaultFrom,to:bounds.to,selectedDate:bounds.to,sourceIds:[...sourceIds],metricKey:'all',plotMetric:'sleep_duration'});
   function normalizeState(input={}) {

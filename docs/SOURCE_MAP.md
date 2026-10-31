@@ -2,7 +2,7 @@
 
 ## Visual and application reuse
 
-The selected existing `design-preview` supplied Carbon colors, bundled Nunito, focus layouts, inline details and segmented chart/day-selection patterns. The current application keeps those choices and all seven main views. `DESIGN.md` records the design; the Nunito font and its SIL Open Font License remain bundled under `dist/assets/`.
+The selected existing `design-preview` supplied Carbon colors, bundled IBM Plex Sans, focus layouts, inline details and segmented chart/day-selection patterns. The current application keeps those choices and all seven main views. `DESIGN.md` records the design; the IBM Plex Sans font and its SIL Open Font License remain bundled under `dist/assets/`.
 
 Original local applications remain outside this repository. Their private credentials, databases, archives and installers are not copied into the public artifact. The current source repository is [coderarush/Bodha](https://github.com/coderarush/Bodha); the AETHRIVA product name, TanujBuilds/coderarush credits and original Git history are retained.
 
@@ -25,3 +25,9 @@ Bluetooth readings remain in page memory, with an explicit local CSV download. M
 `docs/reference/AETHRIVA_PRD.md`, `docs/reference/AETHRIVA_CODEX_HANDOFF.md`, the earlier plans under `docs/superpowers/`, and `docs/DEMO.md` preserve the original synthetic demonstration scope. Their implementation restrictions do not describe the current real-data release. Domain meanings, provenance, complete calculation inputs and descriptive wellness boundaries still apply.
 
 The fictional October fixture and its legacy helpers now live only under `tests/fixtures/` for regression testing. The runtime dependency graph does not import them. Current behavior is documented in `PRODUCT.md`, `docs/CONTRACTS.md` and `docs/IMPLEMENTATION.md`; delivery and verification evidence are recorded separately.
+
+## Current additions
+
+IBM Plex Sans variable Roman font and OFL license come from IBM's official `IBM/plex` repository; exact URLs and hashes are recorded in `dist/assets/ibm-plex-sans-provenance.json`. The previous font remains in Git history.
+
+`server/local-journal.mjs` and new journal client/rendering modules are original AETHRIVA work. They reuse the existing provider-cache mapping and shared Bluetooth quality interpretation, preserving original source credit. The original Health app folders, installed synchronization service, credentials and provider database remain outside this publishable source tree.

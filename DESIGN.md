@@ -1,6 +1,6 @@
 ---
 name: AETHRIVA
-description: Carbon + Nunito wellness evidence workspace
+description: Carbon + IBM Plex Sans wellness evidence workspace
 colors:
   canvas: "#0d0f12"
   nav: "#13161b"
@@ -28,31 +28,42 @@ colors:
   reading-secondary: "#37414a"
 typography:
   display:
-    fontFamily: "Nunito, sans-serif"
-    fontSize: "2.5rem"
-    fontWeight: 750
-    lineHeight: 1.15
-    letterSpacing: "-.025em"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: "normal"
   headline:
-    fontFamily: "Nunito, sans-serif"
-    fontSize: "1.5rem"
-    fontWeight: 750
-    lineHeight: 1.25
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "1.375rem"
+    fontWeight: 600
+    lineHeight: 1.3
   title:
-    fontFamily: "Nunito, sans-serif"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
     fontSize: "1.125rem"
-    fontWeight: 750
-    lineHeight: 1.25
-  body:
-    fontFamily: "Nunito, sans-serif"
-    fontSize: "16px"
-    fontWeight: 450
-    lineHeight: 1.65
-  label:
-    fontFamily: "Nunito, sans-serif"
-    fontSize: ".875rem"
-    fontWeight: 700
+    fontWeight: 600
     lineHeight: 1.4
+  body:
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.6
+  label:
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: ".875rem"
+    fontWeight: 500
+    lineHeight: 1.45
+  metadata:
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: ".8125rem"
+    fontWeight: 400
+    lineHeight: 1.5
+  reading:
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "2.25rem"
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: "-.015em"
 rounded:
   chip: "5px"
   field: "8px"
@@ -105,9 +116,9 @@ components:
 
 ## Overview
 
-**Creative North Star: "Carbon + Nunito"**
+**Creative North Star: "Carbon + IBM Plex Sans"**
 
-A dark, calm evidence workspace with rounded Nunito typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it.
+A dark, calm evidence workspace with precise IBM Plex Sans typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it.
 
 The seven main views share one validated local-history snapshot when available. Connections adds a searchable device catalog and real standard Bluetooth pairing; About explains provenance and limits. The public site starts with empty history. Intelligence calculates locally, and the runtime contains no sample measurements.
 
@@ -123,11 +134,13 @@ The Bluetooth session panel deliberately reuses the mint reading surface `#c0eed
 
 ## Typography
 
-Nunito is bundled locally as a variable font (weights 200–1000, normal style, swap loading). The base remains 16px with 1.65 line height on phones. Main headings are 40px on desktop, 34px below 800px, and 32px below 600px. General text stays around 16px; supporting labels and chart axes are usually 14px. IDs and minor metadata may use 12px.
+IBM Plex Sans is bundled locally as a variable Roman WOFF2 (weight axis 100–700). The interface uses only 400, 500 and 600, with `font-display: swap` and a preloaded WOFF2. System UI fonts provide the fallback. The font and its SIL Open Font License are distributed in `dist/assets`; `ibm-plex-sans-provenance.json` records the official IBM repository source and verified file hashes. No runtime font requests go to another service.
 
-Overview readings use `clamp(29px,3vw,42px)` with weight 750; phone readings use `clamp(24px,6.8vw,32px)`. Recovery readings are 32px above 600px and 36px on phones, with narrower-screen adjustments. Supporting workspace views use 16px prose/tables, 25px section headings, and 18px finding summaries. Intelligence answer prose is 17px on desktop and 16px on phones. Use tabular numerals and retain complete units.
+Use a fixed product type scale: page titles are 30px/1.25 at weight 600, reducing to 28px below 600px. Section headings are 22px/1.3 at 600 and component headings are 18px/1.4 at 600. Body copy and data tables use 16px/1.6 at 400, including on phones. Controls and functional labels use 14px at 500; supporting chart axes use 14px at 400. Minor metadata and record IDs use 13px at 400. Prose stays near 65–75 characters per line. Headings and labels use normal letter spacing.
 
-Connections extends those steps for its specific content: section headings are 25px, general component headings 19px, catalog result titles 18px, and manufacturer/status metadata 13px. The empty-workspace heading is 34px, reducing to 28px below 700px. A live numeric reading is 60px on desktop and 52px below 700px, with 20px units; blood-pressure pairs use `clamp(30px,4vw,48px)` to keep both values readable. Workout titles use 18px, reducing to 17px below 700px. Nunito, tabular numerals and the existing weight hierarchy remain unchanged.
+Selected-day, Recovery and Bluetooth readings use 36px at weight 600 on desktop and 30px on phones, with complete units and tabular numerals. Supporting numeric summaries use 22px; Timeline values use 18px. Only numeric readings use slightly tighter `-.015em` tracking. Missing or hidden reading messages use 22px on desktop and 18px on phones, so state explanations remain distinct from observed numbers. The coverage calendar's center date uses 56px on desktop and 48px on phones.
+
+Controls retain at least 44px height across responsive layouts. Chart points keep their existing date spacing, with a 44px high hit area and the equivalent bounded day controls. Placeholder text uses the existing secondary foreground at full opacity; table headers align to the top and use 14px medium weight, while table values retain 16px and tabular numerals. Print retains its compact reading scale.
 
 ## Layout
 
@@ -164,7 +177,7 @@ General panels and readings use 14px corners; the daily journal uses 16px. Phone
 
 ## Do's and Don'ts
 
-- **Do** keep Carbon + Nunito, dark ink on the four pastel reading panels, readable type, and measurement units.
+- **Do** keep Carbon + IBM Plex Sans, the 400/500/600 hierarchy, dark ink on the four pastel reading panels, readable type, and measurement units.
 - **Do** distinguish records hidden by filters from genuinely absent observations; preserve recorded zero.
 - **Do** keep date bounds, keyboard chart navigation, saved answer scope, and complete inline evidence together.
 - **Don't** interpret coverage tracks as a health or readiness score or infer causation from association.

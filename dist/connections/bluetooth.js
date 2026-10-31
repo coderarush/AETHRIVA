@@ -12,7 +12,7 @@ function binaryView(value) {
 // https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/PLXS_v1.0.1/out/en/index-en.html
 // Blood Pressure Measurement status: GSS §3.34.3, table 3.55 (2026-09-09):
 // https://btprodspecificationrefs.blob.core.windows.net/gatt-specification-supplement/GATT_Specification_Supplement.pdf
-function withMeasurementQuality(sample) {
+export function withMeasurementQuality(sample) {
   const warnings = [];
   let rejectionReason = null;
   if (sample.kind === 'heart_rate') {

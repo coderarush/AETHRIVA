@@ -34,7 +34,7 @@ Connections includes 36 guides across eight categories, searchable by brand, mod
 
 Browser adapters implement standard Bluetooth **Heart Rate**, **Blood Pressure** and **Pulse Oximeter** services. Pairing requires a supported browser, HTTPS or localhost, and a user-selected device in the browser chooser. Exact model and firmware compatibility remains hardware-unverified. ECG waveforms, proprietary protocols and manufacturer cloud connections require separate integrations.
 
-The latest 120 accepted readings stay in page memory and can be downloaded as CSV with available device status, timing and quality warnings. No device readings are uploaded or added to the daily history. Invalid packets and pulse-oximeter demonstration, test, unavailable or invalid measurements are rejected. Live heart rate is distinct from resting heart rate and ECG.
+The latest 120 accepted readings stay in page memory and can be downloaded as CSV with available device status, timing and quality warnings. In the local workspace, Save readings writes accepted samples into the separate private journal for Timeline and Reports; spot measurements remain outside the daily wellness analytics. Invalid packets and pulse-oximeter demonstration, test, unavailable or invalid measurements are rejected. Live heart rate is distinct from resting heart rate and ECG.
 
 ## Development
 
@@ -44,10 +44,23 @@ npm run check
 ```
 
 - `dist/`: buildless browser application, runtime data adapters, views and Bluetooth adapters.
-- `server/`: local read-only cache bridge and same-origin HTTP server.
+- `server/`: read-only provider cache bridge, private journal and same-origin HTTP API.
 - `tests/`: isolated database, analytics, state, rendering and Bluetooth regressions. Synthetic fixtures live only in `tests/fixtures/`.
 - `docs/`: current contracts, implementation notes and verification; earlier demonstration plans remain historical references.
 
-AETHRIVA describes recorded data. It does not diagnose, recommend treatment or produce a readiness score. The Carbon + Nunito design and self-hosted OFL font remain intact.
+AETHRIVA describes recorded data. It does not diagnose, recommend treatment or produce a readiness score. The Carbon + IBM Plex Sans design and self-hosted OFL font remain intact.
 
 Built by [TanujBuilds](https://github.com/TanujBuilds) and [coderarush](https://github.com/coderarush). Original contributor history and credits are retained. See [implementation](docs/IMPLEMENTATION.md), [contracts](docs/CONTRACTS.md), [source map](docs/SOURCE_MAP.md) and [verification](docs/VERIFICATION.md).
+
+## Local database and API
+
+The provider cache stays read-only. New check-ins and explicitly saved device readings use the separate ignored `.local/aethriva.sqlite` journal (override with `AETHRIVA_JOURNAL_PATH`). Records survive browser reloads and server restarts. Google Health and Lyfta synchronization remain managed by the existing Health app on port 3000.
+
+- `GET /api/workspace`: current provider and journal snapshot.
+- `GET /api/status`: cache/journal availability and implemented capabilities.
+- `POST /api/checkins`: one date and integer energy rating from 1–10; upserts that date.
+- `POST /api/device-readings`: up to 120 accepted measurements; retries deduplicate.
+
+Writes require the exact local Origin and JSON content type. Samples retain quality flags and units. Invalid/demo/test/unavailable device readings are rejected. The public static Site has no personal-data backend; the local workspace is the current finished scope. Physical-device compatibility still needs hardware verification.
+
+Typography uses self-hosted IBM Plex Sans from IBM's official repository, with the OFL license and font provenance in `dist/assets/`.

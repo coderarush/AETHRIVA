@@ -39,7 +39,9 @@ const labels = {overview:'Overview',connect:'Connections',recovery:'Recovery',in
 const titles = {...labels};
 const descriptions = {overview:'Start with a day. See what surrounds it. Follow every reading to its source.',connect:'Your apps, your devices, and the records that bring them together.',recovery:'Four separate measurements. One shared date. Explore the changes together.',insights:'See what changed and what moved together.',timeline:'The original observations behind every chart and explanation.',intelligence:'Ask about sleep, steps, resting heart rate, or self-reported energy.',reports:'A neutral summary of the selected records, ready to review or print.',about:'A wellness workspace built around recorded information and transparent calculations.'};
 const questions = ['Summarize sleep and activity patterns.','Compare the earlier and later halves.','What was different on days with lower self-reported energy?','Show the records behind the sleep trend.','Prepare a neutral summary I can discuss with a healthcare professional.'];
-let state = stateFromSearch(location.search), renderedContext = null, version = 0;
+const initialSearch=new URLSearchParams(location.search);
+if(workspace.mode==='synthetic'&&!(initialSearch.get('sources')||'').split(',').some(id=>workspace.sources.some(source=>source.id===id)))initialSearch.delete('sources');
+let state = stateFromSearch(initialSearch.toString()), renderedContext = null, version = 0;
 let conversation = [], draft = '', sending = false, requestVersion = 0, evidence = null, evidenceTrigger = null;
 let motion = 'on';
 try {motion = localStorage.getItem('aethriva-motion') || 'on';} catch {}

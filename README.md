@@ -64,3 +64,7 @@ The provider cache stays read-only. New check-ins and explicitly saved device re
 Writes require the exact local Origin and JSON content type. Samples retain quality flags and units. Invalid/demo/test/unavailable device readings are rejected. The public static Site has no personal-data backend; the local workspace is the current finished scope. Physical-device compatibility still needs hardware verification.
 
 Typography uses self-hosted IBM Plex Sans from IBM's official repository, with the OFL license and font provenance in `dist/assets/`.
+
+## Vercel deployment
+
+Import `coderarush/Bodha` from GitHub. The tracked `vercel.json` selects Other, skips installation/build and serves `dist/`. No environment variables are needed. Leave API paths as 404 so the public workspace starts empty; do not add a catch-all rewrite. Local databases and provider credentials are not deployed.

@@ -1,0 +1,6 @@
+/*
+!dist/
+!package.json
+!vercel.json
+dist/.openai/
+dist/._*

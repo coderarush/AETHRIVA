@@ -1,10 +1,10 @@
-# AETHRIVA
+# Bodha
 
-AETHRIVA brings saved wellness measurements and workouts into a readable timeline, and makes the calculation behind each finding inspectable. It retains Overview, Connections, Recovery, Insights, Timeline, Intelligence and Reports, plus About, in the Carbon + IBM Plex Sans design.
+Bodha brings saved wellness measurements and workouts into a readable timeline, and makes the calculation behind each finding inspectable. It retains Overview, Connections, Recovery, Insights, Timeline, Intelligence and Reports, plus About, in the Carbon + IBM Plex Sans design.
 
 ## Local history and public first run
 
-The local application reads a selected account's existing Ascend cache through a read-only bridge, and keeps a separate private SQLite journal for energy check-ins and saved Bluetooth measurements. Google Health contributes saved daily steps, total sleep duration and resting heart rate where available. Lyfta contributes saved workouts, exercises and sets. The existing local Health app continues to own provider authorization, credentials and synchronization. Refreshing AETHRIVA rereads that cache.
+The local application reads a selected account's existing Ascend cache through a read-only bridge, and keeps a separate private SQLite journal for energy check-ins and saved Bluetooth measurements. Google Health contributes saved daily steps, total sleep duration and resting heart rate where available. Lyfta contributes saved workouts, exercises and sets. The existing local Health app continues to own provider authorization, credentials and synchronization. Refreshing Bodha rereads that cache.
 
 The public static application contains no personal history or sample measurements. It opens an empty workspace with connection guides and available browser Bluetooth controls. A missing local API is an empty first run; a failed API is an explicit load error. Failed refreshes preserve the previous snapshot. Successful refreshes clear earlier answers so their evidence cannot be confused with the new snapshot.
 

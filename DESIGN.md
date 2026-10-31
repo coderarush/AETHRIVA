@@ -1,5 +1,5 @@
 ---
-name: AETHRIVA
+name: Bodha
 description: Carbon + IBM Plex Sans wellness evidence workspace
 colors:
   canvas: "#0d0f12"
@@ -112,7 +112,7 @@ components:
     padding: "9px 12px"
 ---
 
-# Design System: AETHRIVA
+# Design System: Bodha
 
 ## Overview
 
@@ -186,3 +186,5 @@ General panels and readings use 14px corners; the daily journal uses 16px. Phone
 Source of truth: `dist/styles.css`, `dist/experience.css`, `dist/workspace.css`, `dist/connections.css`, `dist/app.js`, `dist/charts.js`, and the page renderers. This document records current source behavior; validation evidence belongs in `docs/VERIFICATION.md`.
 
 The shell uses a quieter selected-navigation treatment, consistent scope controls and compact two-row phone filters. No-data first visits without an explicit route open Connections so people can identify a source or device immediately; recorded workspaces still open Overview.
+
+Insights leads with plain-language period changes and labeled Earlier/Later comparison bars. Values, observed-day counts and evidence actions stay visible. Repeated findings, full tables and method notes are grouped in a native disclosure. Metric colors describe the measurement, never health quality.

@@ -216,3 +216,32 @@
  .intelligence-workspace .composer-bottom{gap:16px}
  .workspace-reports .report>section{margin-top:28px}
 }
+
+/* Insights: one comparison per measurement; technical detail stays optional. */
+.simple-trends>.section-title{margin-bottom:24px}
+.simple-trends>.section-title p{max-width:none;font-size:14px;line-height:1.8}
+.simple-trend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.simple-trend{min-width:0;background:var(--surface);padding:28px;border-radius:14px}
+.simple-trend h3{margin:0 0 14px;font-size:18px}
+.simple-trend .trend-change{font-size:30px;font-weight:600;line-height:1.2;letter-spacing:-.015em;margin:0;color:var(--trend-color);font-variant-numeric:tabular-nums}
+.simple-trend .trend-average{font-size:14px;margin:7px 0 24px}
+.trend-values{display:grid;gap:16px;margin:0 0 24px}
+.trend-values>div{display:grid;grid-template-columns:1fr auto;gap:5px 16px}
+.trend-values dt{font-size:14px;color:var(--text)}
+.trend-values dt small{display:block;color:var(--secondary);font-size:13px}
+.trend-values dd{margin:0;font-size:20px;font-weight:500;font-variant-numeric:tabular-nums}
+.trend-bar{grid-column:1/-1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.trend-bar i{display:block;height:100%;background:var(--trend-color);border-radius:3px;opacity:.8}
+.trend-values>div:first-child .trend-bar i{opacity:.4}
+.trend-missing{margin:20px 0 0;padding-left:20px;font-size:14px;line-height:1.8}
+.trend-small-sample{font-size:14px;color:var(--secondary);margin:0 0 18px}
+.trend-range-note{font-size:14px;margin-bottom:20px}
+.workspace-insights .insights-context{font-size:14px;margin:0;max-width:75ch}
+.insights-details{border-block:1px solid var(--line);padding:6px 0}
+.insights-details>summary{min-height:56px;align-content:center;font-size:16px;font-weight:500;cursor:pointer;padding:12px 4px}
+.insights-detail-content{display:grid;gap:28px;padding:20px 0}
+.insights-detail-content>section>h2{margin-bottom:22px}
+.insights-next{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.insights-next p{font-size:16px}
+@media(max-width:700px){.simple-trend-grid{grid-template-columns:1fr;gap:18px}.simple-trend{padding:24px}.simple-trend .trend-change{font-size:28px}.trend-period-separator{display:none}.simple-trends>.section-title p>span{display:block}.insights-next{align-items:flex-start;flex-direction:column}}
+@media print{.simple-trend-grid{display:block}.simple-trend{break-inside:avoid;margin-bottom:16px}.insights-next{display:none}}

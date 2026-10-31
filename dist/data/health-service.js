@@ -113,7 +113,7 @@ function requestedMetrics(question) {
 async function answerQuestion(question,filters={}) {
   normalizeFilters(filters); // Invalid source/metric filters always reject explicitly.
   if(typeof question!=='string'||!question.trim())return insufficient('Choose a supported question about the selected records.');
-  if(classify(question)==='clinical')return response('AETHRIVA can organize recorded information, but cannot diagnose or recommend treatment. Discuss clinical concerns with a qualified healthcare professional. For an immediate emergency, use local emergency services.',[],'out_of_scope');
+  if(classify(question)==='clinical')return response('Bodha can organize recorded information, but cannot diagnose or recommend treatment. Discuss clinical concerns with a qualified healthcare professional. For an immediate emergency, use local emergency services.',[],'out_of_scope');
   let scope;
   try { scope=queryScope(question,filters); } catch { return insufficient('The requested dates could not be resolved. Use calendar dates, ISO dates, or the last N days ending at the selected period’s end.'); }
   const {filters:f,text}=scope,intent=classify(text);

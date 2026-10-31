@@ -30,3 +30,7 @@ No physical Bluetooth device was paired during verification. Standard Heart Rate
 - This pass changes UI and image delivery only. Existing private databases, source normalization, calculations and connection protocols retain their previous behavior. No physical device pairing was performed.
 
 The final static first visit was verified to open Connections with no records loaded. The design detector returned 75 advisory palette, radius and type-scale findings and no non-advisory findings; the intentional current Carbon/pastel treatments are documented in DESIGN.md.
+
+## Bodha name and simpler Insights
+
+105 regression tests and the static checks passed. The simplified view was exercised at measured widths of 320, 390, 768, 1024 and 1440px with the calculation disclosure open, without document overflow. Evidence opened with all 29 selected sleep input records, closing restored focus, metric filters narrowed the cards, and the seven-day comparison disclosed the excluded date. A local-only screenshot was inspected; personal readings are not added to published source. The app uses Bodha throughout visible runtime copy; existing local storage keys, database paths, environment variable names and the hosting URL remain compatible.

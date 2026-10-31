@@ -1,4 +1,4 @@
-# AETHRIVA
+# Bodha
 
 Your health, connected and understood. A personal wellness workspace built for the Founders Inc. Nighthack, with local Google Health and Lyfta history, a searchable device catalog, and evidence you can inspect.
 
@@ -14,7 +14,7 @@ npm run dev
 
 Open [the local workspace](http://127.0.0.1:4173). It reads saved history from the existing Ascend cache at `~/Library/Application Support/Ascend/data/ascend.sqlite`. The database remains outside this repository and is opened read-only. Set `AETHRIVA_DB_PATH` to use a different compatible cache. Set `AETHRIVA_ACCOUNT_ID` when the cache contains multiple accounts; accounts are never combined automatically.
 
-The existing [Health app](http://localhost:3000) owns Google authorization, Lyfta credentials and synchronization. AETHRIVA's **Refresh history** rereads saved records; it does not start a provider sync. Authorize or synchronize in the Health app, then refresh this workspace.
+The existing [Health app](http://localhost:3000) owns Google authorization, Lyfta credentials and synchronization. Bodha's **Refresh history** rereads saved records; it does not start a provider sync. Authorize or synchronize in the Health app, then refresh this workspace.
 
 The public static site starts with empty history and connection guides. It cannot read your computer's database. A missing or failed local connection never substitutes sample measurements.
 
@@ -48,7 +48,7 @@ npm run check
 - `tests/`: isolated database, analytics, state, rendering and Bluetooth regressions. Synthetic fixtures live only in `tests/fixtures/`.
 - `docs/`: current contracts, implementation notes and verification; earlier demonstration plans remain historical references.
 
-AETHRIVA describes recorded data. It does not diagnose, recommend treatment or produce a readiness score. The Carbon + IBM Plex Sans design and self-hosted OFL font remain intact.
+Bodha describes recorded data. It does not diagnose, recommend treatment or produce a readiness score. The Carbon + IBM Plex Sans design and self-hosted OFL font remain intact.
 
 Built by [TanujBuilds](https://github.com/TanujBuilds) and [coderarush](https://github.com/coderarush). Original contributor history and credits are retained. See [implementation](docs/IMPLEMENTATION.md), [contracts](docs/CONTRACTS.md), [source map](docs/SOURCE_MAP.md) and [verification](docs/VERIFICATION.md).
 

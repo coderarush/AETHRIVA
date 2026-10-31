@@ -1,20 +1,18 @@
-# One-minute demonstration
+# Demo script · aim for 60 seconds
 
-Start with Reset demo. Use a desktop browser, the full 30-day range, all sources and all metrics. All records are visibly synthetic.
+Start with **Reset demo**, then open **Connect**. Keep the full 30-day range, all three sources, and all metrics. Rehearse the short script below before presenting.
 
-1. **0–10 seconds — Overview.** “Health information is scattered. AETHRIVA brings it into one connected history.” Point to coverage and the linked sleep trend.
-2. **10–20 seconds — Connect.** Show the three fictional sources and the 110 canonical observations. “Every observation keeps its original source, time, and unit.”
-3. **20–35 seconds — Recovery.** Select a day in the shared day strip. “Sleep, movement, heart rate, and reported energy stay separate, while sharing the same date.”
-4. **35–50 seconds — Intelligence.** Use Ask Intelligence below Recovery, or the lower-energy suggested question. “The application calculates differences from the records, then explains what it found.”
-5. **50–60 seconds — Evidence.** Select Trace this finding. “The answer is inspectable all the way down to the input records. No opaque health score, and no claim that association means cause.”
+1. **Connect.** Point to the three source rows and 110 records in scope. “These are fictional wearable, activity, and check-in records. Every observation keeps its source, time, and original measurement.”
+2. **Recovery.** Use the selected-day input or previous-day button. “Four separate measurements share one date. The aligned charts show what changed, including gaps; they do not produce a health score.”
+3. **Intelligence.** Open Intelligence and choose **Explore lower-energy days**. “This browser calculates a supported comparison from the selected records. The answer keeps its dates, named sources, measurement scope, and limitations.”
+4. **Trace this finding.** Select that action under one result. “These are the complete inputs behind this finding, with the calculation and original source details. The association describes this sample; it does not establish cause.”
 
-## Before judging
+The sequence is a presentation target, not a measured completion-time claim. Rehearse on the public URL in a signed-out browser, then reset. Once the app has loaded, exploration uses local data and calculations; it needs no account, upload, or AI provider.
 
-- Verify the public URL in an independent signed-out browser.
-- Rehearse the full sequence twice and reset afterward.
-- The application needs no AI provider. Once loaded, interactions use local data only.
-- Keep the working public URL ready; the repo also includes a local static server as a development fallback.
+## Optional follow-up
 
-## Extra exploration
-
-Try 14 or 7-day ranges, exclude a source, inspect October 4's actual zero steps, inspect a missing sleep day, use Timeline metric filters, compare periods, or prepare a neutral printable report. Unsupported questions return insufficient evidence; clinical requests return outside-scope guidance.
+- In Overview, inspect the pastel readings and four-track coverage circle. Each segment is a date with a recorded, missing, or excluded measurement.
+- Change the Overview trend using a reading's **Explore** action; the other daily measurements keep their global filters.
+- Inspect October 4's actual zero steps or October 6's missing sleep observation.
+- Try 7/14-day ranges, source exclusions, Timeline metric filters, or a neutral printable report.
+- Unsupported measurements return insufficient evidence; clinical requests return outside-scope guidance. Real connections and clinical imports remain future capabilities.

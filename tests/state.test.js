@@ -33,3 +33,50 @@ test('an explicit question range is preserved with its answer evidence', () => {
   const resolved=scopeFromEvidence(filters,{calculations:[{periodStart:'2026-10-01',periodEnd:'2026-10-30'}]});
   assert.deepEqual(resolved,{from:'2026-10-01',to:'2026-10-30',sourceIds:['wearable']});
 });
+
+test('a bookmarked Overview plot remains independent of the shared metric filter', () => {
+  const state = {...createInitialState(), metricKey:'steps', plotMetric:'resting_heart_rate'};
+  const search = searchFromState(state);
+  assert.equal(new URLSearchParams(search).get('plot'), 'resting_heart_rate');
+  const restored = stateFromSearch(search);
+  assert.equal(restored.plotMetric, 'resting_heart_rate');
+  assert.equal(restored.metricKey, 'steps');
+  assert.deepEqual(restored, state);
+});
+
+test('all four measurements are accepted as a local plot without changing the global filter', () => {
+  for (const plotMetric of ['sleep_duration', 'steps', 'resting_heart_rate', 'energy']) {
+    const state = stateFromSearch(`?metric=energy&plot=${plotMetric}`);
+    assert.equal(state.plotMetric, plotMetric);
+    assert.equal(state.metricKey, 'energy');
+  }
+});
+
+test('invalid and absent local plot choices recover to sleep without changing metric scope', () => {
+  for (const plotMetric of ['all', 'unknown', '__proto__', '']) {
+    const state = normalizeState({...createInitialState(), metricKey:'steps', plotMetric});
+    assert.equal(state.plotMetric, 'sleep_duration');
+    assert.equal(state.metricKey, 'steps');
+  }
+  assert.equal(stateFromSearch('?screen=overview&metric=steps').plotMetric, 'sleep_duration');
+  assert.equal(stateFromSearch('?plot=unknown').plotMetric, 'sleep_duration');
+});
+
+test('date and source scope changes preserve the independently selected plot', () => {
+  const state = {...createInitialState(), metricKey:'steps', plotMetric:'energy'};
+  const ranged = rangeState(state, 7);
+  const filtered = toggleSource(ranged, 'wearable', false);
+  assert.equal(ranged.plotMetric, 'energy');
+  assert.equal(filtered.plotMetric, 'energy');
+  assert.equal(filtered.metricKey, 'steps');
+  assert.deepEqual(filtered.sourceIds, ['activity','checkin']);
+});
+
+test('resetting state restores the sleep plot and all-metrics filter', () => {
+  const changed = normalizeState({...createInitialState(), plotMetric:'energy', metricKey:'steps'});
+  assert.equal(changed.plotMetric, 'energy');
+  const reset = createInitialState();
+  assert.equal(reset.plotMetric, 'sleep_duration');
+  assert.equal(reset.metricKey, 'all');
+  assert.equal(stateFromSearch(searchFromState(reset)).plotMetric, 'sleep_duration');
+});

@@ -13,81 +13,92 @@ colors:
   line: "#333b48"
   control-line: "#63758f"
   text: "#f2f5fb"
-  secondary: "#b1bdcd"
+  secondary: "#b8c3d2"
   accent: "#86b0ff"
   on-accent: "#10203c"
   sleep: "#b9a4ff"
   steps: "#ff9a62"
   energy: "#69d5ba"
+  sleep-panel: "#ded3ff"
+  steps-panel: "#ffd5b9"
+  heart-rate-panel: "#c9dfff"
+  energy-panel: "#c0eedf"
+  reading-ink: "#182027"
+  reading-label: "#29333e"
+  reading-secondary: "#37414a"
 typography:
   display:
     fontFamily: "Nunito, sans-serif"
-    fontSize: "clamp(29px,2.6vw,37px)"
-    fontWeight: 700
-    lineHeight: 1.25
+    fontSize: "2.5rem"
+    fontWeight: 750
+    lineHeight: 1.15
     letterSpacing: "-.025em"
   headline:
     fontFamily: "Nunito, sans-serif"
-    fontSize: "21px"
-    fontWeight: 700
+    fontSize: "1.5rem"
+    fontWeight: 750
     lineHeight: 1.25
-    letterSpacing: "-.025em"
   title:
     fontFamily: "Nunito, sans-serif"
-    fontSize: "17px"
-    fontWeight: 700
+    fontSize: "1.125rem"
+    fontWeight: 750
     lineHeight: 1.25
-    letterSpacing: "-.025em"
   body:
     fontFamily: "Nunito, sans-serif"
-    fontSize: "15px"
+    fontSize: "16px"
     fontWeight: 450
-    lineHeight: 1.6
+    lineHeight: 1.65
   label:
     fontFamily: "Nunito, sans-serif"
-    fontSize: "14px"
-    fontWeight: 650
+    fontSize: ".875rem"
+    fontWeight: 700
     lineHeight: 1.4
 rounded:
   chip: "5px"
   field: "8px"
   control: "9px"
-  message: "12px"
   panel: "14px"
+  journal: "16px"
 spacing:
   inline: "9px"
-  control-y: "8px"
-  control-x: "15px"
-  grid: "20px"
+  control-y: "10px"
+  control-x: "16px"
+  grid: "22px"
   columns: "24px"
-  panel: "26px"
+  panel: "28px"
+  reading: "22px"
 components:
   button-primary:
     backgroundColor: "{colors.accent}"
     textColor: "{colors.on-accent}"
     typography: "{typography.label}"
     rounded: "{rounded.control}"
-    padding: "8px 15px"
-    height: "42px"
+    padding: "10px 16px"
+    height: "44px"
   button-secondary:
     textColor: "{colors.text}"
     typography: "{typography.label}"
     rounded: "{rounded.control}"
-    padding: "8px 15px"
+    padding: "10px 16px"
   panel:
     backgroundColor: "{colors.surface}"
     rounded: "{rounded.panel}"
-    padding: "26px"
+    padding: "28px"
+  sleep-reading:
+    backgroundColor: "{colors.sleep-panel}"
+    textColor: "{colors.reading-ink}"
+    rounded: "{rounded.panel}"
+    padding: "22px"
   chip:
     backgroundColor: "{colors.chip}"
-    textColor: "#bed4ff"
+    textColor: "#c7daff"
     rounded: "{rounded.chip}"
-    padding: "3px 9px"
+    padding: "4px 9px"
   field:
     backgroundColor: "{colors.input}"
     textColor: "{colors.text}"
     rounded: "{rounded.field}"
-    padding: "8px 12px"
+    padding: "9px 12px"
 ---
 
 # Design System: AETHRIVA
@@ -96,97 +107,59 @@ components:
 
 **Creative North Star: "Carbon + Nunito"**
 
-The selected existing world is a calm dark workspace with rounded Nunito typography, generous primary plots, quiet supporting prose, and evidence close to the finding. This is a record of the shipped code, not a proposal for a replacement identity.
+A dark, calm evidence workspace with rounded Nunito typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it.
 
-Tonal surfaces carry hierarchy while blue marks navigation, actions, and selection. Metric color provides continuity across charts and readings. The implementation is code-led reuse; it has no generated imagery or approved image composition dependency.
-
-**Key Characteristics:**
-
-- Dark carbon surfaces and restrained blue interaction accents.
-- Locally bundled Nunito throughout, with tabular numerals for measurements.
-- Expansive focus plots balanced by contextual prose.
-- Inline, inspectable evidence and explicit synthetic-data context.
+The seven main views share one fictional October 2026 dataset. About explains the demonstration. All connections, observations, and import details are synthetic; Intelligence calculates locally.
 
 ## Colors
 
-### Primary
+Carbon neutrals carry the shell, reading surfaces, fields, and separators. Accent blue marks actions and focus. The brighter metric colors identify sleep (lavender), steps (orange), resting heart rate (blue), and self-reported energy (mint) across full charts and coverage tracks.
 
-- **Accent blue** (`accent`): actions, selected navigation labels, focus outlines, findings, and resting-heart-rate graphics. `on-accent` supplies text on filled blue controls.
+Overview's reading panels use `#ded3ff`, `#ffd5b9`, `#c9dfff`, and `#c0eedf` in that order. Primary readings use dark ink `#182027`; labels use `#29333e`, and mini-chart/context text uses `#37414a`. Keep these dark foregrounds on pastel panels rather than carrying over light shell text. Tooltips and toasts use `#d4e3fb` with `#152139` text.
 
-### Secondary
-
-- **Sleep lavender**, **steps orange**, and **energy mint** (`sleep`, `steps`, `energy`): stable metric identifiers. Energy mint also indicates source/status success.
-
-### Neutral
-
-- `canvas` is the page ground; `nav` carries the shell and inset elements; `surface` carries panels; `raised` carries popovers and hovered question cards.
-- `input` separates editable fields. `hover`, `selection`, and `chip` provide interaction and annotation layers.
-- `text` is primary copy; `secondary` also supplies the CSS `muted` alias. `line` divides content; `control-line` gives controls and evidence stronger boundaries.
-- Chart tips and toasts use a pale blue inversion (`#d4e3fb` background, `#152139` text), rather than the normal dark surface.
-
-**The Metric Continuity Rule.** Keep each metric's identity consistent between its label, numeric value, plot, and selected point; retain units and explicit missingness.
+**Metric continuity:** retain the same measurement identity across its panel, full chart, coverage track, units, and evidence. Color supports the written metric name; it does not encode health quality.
 
 ## Typography
 
-Nunito is a locally bundled variable face (supported weights 200–1000, normal style, swap loading) with a sans-serif fallback. No separate display or label family is used. The frontmatter records the base hierarchy; contextual overrides remain intentional.
+Nunito is bundled locally as a variable font (weights 200–1000, normal style, swap loading). The base remains 16px with 1.65 line height on phones. Main headings are 40px on desktop, 34px below 800px, and 32px below 600px. General text stays around 16px; supporting labels and chart axes are usually 14px. IDs and minor metadata may use 12px.
 
-Page headings use the display role; the mobile page heading is (30px). Section headings commonly use (19px), with workspace section headings at (21px). Navigation is (14px, 650), secondary annotations commonly (12–13px). Primary trend values use (clamp(32px,3.4vw,48px), 650); recovery values use (37px, 650). Measurements and tables use tabular numerals. Body paragraphs cap at (75ch); answer prose uses (1.85) line height and an (80ch) cap. At the mobile breakpoint the root becomes (14px); many component sizes are explicitly overridden.
+Overview readings use `clamp(29px,3vw,42px)` with weight 750; phone readings use `clamp(24px,6.8vw,32px)`. Recovery readings are 32px above 600px and 36px on phones, with narrower-screen adjustments. Supporting workspace views use 16px prose/tables, 25px section headings, and 18px finding summaries. Intelligence answer prose is 17px on desktop and 16px on phones. Use tabular numerals and retain complete units.
 
 ## Layout
 
-The centered workspace caps at (1440px), with desktop padding (36px 44px 26px). The header is a horizontal brand/navigation/action row. The overview focus grid is (2.1fr / minmax(250px,1fr)) with a (28px) gap; Recovery is two columns with a (22px) gap. General cards begin at three columns, and selected-day readings at four. Reports cap at (1100px), Intelligence at (1000px).
+At >=1200px, a sticky 196px left navigation rail sits beside the workspace; it becomes 220px at >=1600px. The workspace caps at 1510px including padding. Below 1200px, navigation becomes a horizontally scrolling row under the brand. The body minimum width is 320px; tables and charts scroll within their own containers.
 
-At (max-width:1279px), navigation wraps onto its own row and workspace padding narrows. At (max-width:900px), focus content stacks, navigation becomes a single horizontally scrolling row with hidden icons, general cards become two columns, and day readings become two columns. At (max-width:600px), workspace padding becomes (26px 17px 22px), Recovery, question cards, and general card/two-column groups become one column. Some metric and comparison grids remain two columns. Navigation and the day strip intentionally scroll horizontally; tables have their own overflow wrapper. The body minimum width is (320px).
+Overview places the coverage calendar beside a two-by-two reading grid. The calendar/grid composition stacks below 780px. At <=560px the visible order is heading, bounded day controls, four reading panels, coverage calendar, then the supporting trend section. Reading panels remain two columns. This gives phones immediate measurements before the month map.
 
-Main plots are (220px) tall, overview plots increase to (245px) above (1280px), and Recovery/mobile plots are (180px). On mobile, scope popovers anchor to the toolbar and fit its available width. Print switches to light surfaces, removes interactive shell/composer controls, and flattens panels for paper.
+Recovery uses four aligned full-width rows, each with a reading column and a shared-width chart. Above 600px the plot height is 120px so several measurements fit together; on phones each reading precedes its 180px chart. Earlier/later comparisons follow these rows. Odd ranges explicitly name dates excluded to make comparison windows equal.
+
+On phones, full charts use a minimum width derived from date count, allowing horizontal panning with readable targets. The value axis stays sticky at the left; a swipe hint explains the overflow. Supporting source rows, findings, and About sections stack at their own content breakpoints. Print uses light surfaces and removes interactive shell controls.
 
 ## Elevation & Depth
 
-Depth primarily comes from tonal layering and separators. Resting content panels have no shadow. Shadows identify transient overlays: chart tips (`0 7px 22px #0005`), scope popovers (`0 12px 26px #0006`), and toasts (`0 12px 30px #0005`).
+Tonal layering and rules separate resting content. Shadows identify transient content: chart tips (`0 7px 22px #0005`), scope popovers (`0 12px 30px #0009`), and toasts (`0 12px 30px #0005`). Reading panels stay flat.
 
 ## Shapes
 
-Panels use the panel radius, becoming (12px) on mobile. Controls and table clipping use the control radius; fields use the field radius. Messages, the composer, and question cards use the message radius. Small chips are compact rounded rectangles, not capsules. The avatar is circular. Content divisions are thin, muted rules; controls use a stronger visible stroke.
+General panels and readings use 14px corners; the daily journal uses 16px. Phone readings reduce to 12px. Controls use 9px, fields 8px, and annotation chips 5px. Coverage uses four segmented circular tracks; the center contains the selected calendar date.
 
 ## Components
 
-### Buttons and navigation
-
-Primary buttons fill with accent blue; secondary buttons use a transparent ground and control stroke. Hover lightens primary fill to (`#a1c2ff`); secondary hover uses the hover surface and accent border. Both keep a (42px) minimum height. Small buttons use a (34px) minimum. Text/evidence actions are blue with an underline on hover. Navigation uses a selected tonal blue surface, rounded corners, and blue text; neutral labels brighten on hover. Disabled buttons have (0.5) opacity and a not-allowed cursor.
-
-### Fields and composer
-
-Select/date fields use the inset input surface and a visible control stroke with a (40px) minimum height. The composer is a surface container with a (12px) radius, (16px) padding, and an editable textarea of at least (83px). Focus within changes its border to blue; the textarea suppresses its own outline because the container carries this state. General interactive focus uses a (2px) blue outline offset by (4px).
-
-### Chips and panels
-
-Chips use compact (12px, 650) text with a pale blue label; success chips use mint. Panels use generous padding and tonal separation. Question cards add a thin rule, category label, and trailing action cue; hover raises the tonal surface and strengthens the border.
-
-### Charts and day selection
-
-SVG lines use rounded caps/joins and a (2.2px) stroke. Missing observations remain gaps. Selected points gain a primary-text stroke, with a dashed vertical guide. Transparent button targets expose keyboard focus and tooltips. The day strip uses compact dark buttons with a filled blue selected state and a separate selected-date label.
-
-### Answers and inline evidence
-
-Answers are reading surfaces: qualified prose, separated findings, limitations disclosure, and tracing actions. User messages align right on the selection surface. Evidence expands in the page after the current view content; it is not a modal or drawer. Its bordered panel receives focus, shows scope and calculation disclosures, and provides a horizontally scrollable records table with stable IDs, timestamps, sources, values, and provenance. Record rows and calculation inputs preserve genuine zero values and absent observations.
-
-### Motion
-
-State transitions use (0.18s) and `cubic-bezier(.16,1,.3,1)`; tips fade over (0.15s). Selected chart marks fade from (0.35) opacity over (0.24s) when motion is permitted. OS reduced-motion preferences and the explicit Motion off setting disable animations/transitions and smooth CSS scrolling. No decorative continuous motion is present.
+- **Navigation and actions:** selected routes use a blue tonal background and `aria-current`. Primary buttons use accent blue/dark text with a 44px minimum height; secondary actions use a visible outline. Evidence remains a labelled text action. Interactive focus uses a 2px outline offset by 4px, with dark focus on pastel panels.
+- **Coverage calendar:** every segment maps to a civil date in the selected range. Tracks run outside to inside: sleep, steps, resting heart rate, energy. Recorded values color their segment; missing values remain neutral and excluded metrics have dim dashed segments. A radial guide marks the selected day. This is record coverage, never a health, completion, or readiness score.
+- **Selected day:** previous/next buttons and a native date input stay within the current range; endpoint buttons disable. Selecting a day synchronizes readings and charts. Genuine absence says “Not recorded”; source/metric exclusion says “Hidden by filters” with a restore action.
+- **Overview trend:** panel Explore actions and metric tabs change `plotMetric` (URL `plot`) only. Global dates, sources, and `metricKey` remain independent. Mini charts are descriptive and noninteractive; full plots expose exact points and preserve gaps/zero values.
+- **Chart keyboard use:** one point per full chart is in the tab order. Left/Right move by date; Home/End select the first/last date. Focus and selected-point visibility survive rerenders. Mobile panning retains the value axis.
+- **Scope controls:** source/date disclosures share one open state. Escape and outside interaction close them; applying dates returns focus to the date summary. Source switches update the same global selection as the toolbar.
+- **Intelligence and evidence:** the labelled composer shows current dates, named sources, and metric scope. Each retained answer separately displays its saved dates, named sources, and metric scope; later filter changes do not rewrite its evidence context. “Trace this finding” opens inline evidence with complete calculation inputs, provenance, and a labelled keyboard-focusable scroll region. Closing it returns to its originating action.
+- **Motion:** state transitions use 180ms and `cubic-bezier(.16,1,.3,1)`. The user's Reduce motion setting and OS preference both disable animated transitions and programmatic smooth scrolling. No continuous decorative motion is used.
 
 ## Do's and Don'ts
 
-### Do:
+- **Do** keep Carbon + Nunito, dark ink on the four pastel reading panels, readable type, and measurement units.
+- **Do** distinguish records hidden by filters from genuinely absent observations; preserve recorded zero.
+- **Do** keep date bounds, keyboard chart navigation, saved answer scope, and complete inline evidence together.
+- **Don't** interpret coverage tracks as a health or readiness score or infer causation from association.
+- **Don't** imply that synthetic source rows are live connections or locally calculated answers are live AI.
 
-- **Do** reuse the Carbon + Nunito world and existing metric colors.
-- **Do** keep readable prose, visible keyboard focus, scoped calculations, units, and evidence actions together.
-- **Do** preserve chart gaps, explicit missing states, and valid recorded zero values.
-- **Do** preserve responsive stacking and intentional internal scrolling.
-
-### Don't:
-
-- **Don't** replace the selected visual world during incremental work.
-- **Don't** add a composite health/readiness score or imply clinical or causal conclusions.
-- **Don't** present synthetic source cards or locally calculated answers as live integrations or live AI.
-
-Source of truth: `dist/styles.css`, `dist/app.js`, `dist/pages/experience.js`, and `dist/pages/workspace.js`. Context: `docs/IMPLEMENTATION.md`, `docs/SOURCE_MAP.md`. Visual disposition: `.superpowers/visual-review.md` (ship; no required fixes). This scan documents current implementation, including later CSS overrides; it does not amend earlier reference-world documents.
+Source of truth: `dist/styles.css`, `dist/experience.css`, `dist/workspace.css`, `dist/app.js`, `dist/charts.js`, and the page renderers. This document records current source behavior; validation evidence belongs in `docs/VERIFICATION.md`.

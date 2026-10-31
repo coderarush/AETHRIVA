@@ -6,11 +6,14 @@ export const metricColors = Object.freeze({
 
 // Adapted from the selected preview's segmented SVG line chart. Nulls break the
 // path; points remain exact, with no smoothing or interpolated observations.
-export function timeSeriesChart({ points = [], metricKey, selectedDate, id = 'series', interactive = true }) {
+export function timeSeriesChart({ points = [], metricKey, selectedDate, id = 'series', interactive = true, compact = false }) {
   const safeId = String(id).replace(/[^a-zA-Z0-9_-]/g, '-');
   const valid = points.filter(point => Number.isFinite(point.value));
-  if (!valid.length) return `<div class="chart-empty empty-state"><p>No ${escapeHtml(metricLabel(metricKey).toLowerCase())} records in this view.</p><span class="muted">Change the date range or source filters to explore available records.</span></div>`;
-  const upper = metricKey === 'energy' ? Math.max(10, ...valid.map(point => point.value)) : Math.max(...valid.map(point => point.value), 1) * 1.12;
+  if (!valid.length) return compact ? '<p class="mini-chart-empty">No observations in this period</p>' : `<div class="chart-empty empty-state"><p>No ${escapeHtml(metricLabel(metricKey).toLowerCase())} records in this view.</p><span class="muted">Change the date range or source filters to explore available records.</span></div>`;
+  // Round the upper limit to a meaningful interval while retaining a zero baseline.
+  const interval = {sleep_duration:120, steps:2000, resting_heart_rate:20, energy:2}[metricKey] || 1;
+  const maximum = Math.max(...valid.map(point => point.value), 1);
+  const upper = metricKey === 'energy' ? Math.max(10, Math.ceil(maximum / 2) * 2) : Math.ceil(maximum * 1.08 / interval) * interval;
   const x = index => points.length === 1 ? 500 : 28 + index * 944 / (points.length - 1);
   const y = value => 192 - value / upper * 170;
   let drawing = false;
@@ -21,10 +24,13 @@ export function timeSeriesChart({ points = [], metricKey, selectedDate, id = 'se
     return segment;
   }).join(' ');
   const selectedIndex = points.findIndex(point => point.date === selectedDate);
+  const focusIndex = selectedIndex < 0 ? points.length - 1 : selectedIndex;
   const label = point => `${formatDate(point.date, { short: true })}: ${Number.isFinite(point.value) ? formatMetric(point.value, metricKey) : 'No recorded value'}`;
+  if (compact) return `<figure class="mini-chart" aria-labelledby="${safeId}-caption"><svg viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(metricLabel(metricKey))} trend, ${valid.length} recorded days. Zero baseline; gaps are missing observations."><line class="mini-baseline" x1="28" x2="972" y1="192" y2="192"/><path class="chart-line" d="${path}"/>${points.map((point,index) => !Number.isFinite(point.value) ? '' : `<circle class="mini-point ${point.date === selectedDate ? 'is-selected' : ''}" cx="${x(index)}" cy="${y(point.value)}" r="${point.date === selectedDate ? 9 : 3}"><title>${escapeHtml(label(point))}</title></circle>`).join('')}</svg><figcaption id="${safeId}-caption">${escapeHtml(formatDate(points[0].date,{short:true}))} – ${escapeHtml(formatDate(points.at(-1).date,{short:true}))}</figcaption></figure>`;
   const ticks = [...new Set([0, Math.floor((points.length - 1) / 2), points.length - 1])];
-  return `<figure class="time-series" style="--metric-color:${metricColors[metricKey] || metricColors.resting_heart_rate}" aria-labelledby="${safeId}-caption">
-    <figcaption class="sr-only" id="${safeId}-caption">${escapeHtml(metricLabel(metricKey))} by date. Missing observations appear as gaps.${interactive ? ' Select a point to explore that day across all measurements.' : ''}</figcaption>
+  return `<figure class="time-series" ${interactive ? 'data-chart-keyboard' : ''} style="--metric-color:${metricColors[metricKey] || metricColors.resting_heart_rate}" aria-labelledby="${safeId}-caption">
+    <figcaption class="sr-only" id="${safeId}-caption">${escapeHtml(metricLabel(metricKey))} by date. Missing observations appear as gaps.${interactive ? ' Select a point to explore that day across all measurements. Use Left and Right arrow keys to change days, Home for the first day, and End for the last.' : ''}</figcaption>
+    <div class="chart-scroll" data-chart-scroll="${safeId}"><div class="chart-canvas" style="--chart-min-width:${Math.max(300, points.length * 28 + 90)}px">
     <div class="chart-scale" aria-hidden="true"><span>${escapeHtml(formatMetric(upper, metricKey))}</span><span>${escapeHtml(formatMetric(upper / 2, metricKey))}</span><span>${escapeHtml(formatMetric(0, metricKey))}</span></div>
     <div class="chart-plot">
       <svg viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(metricLabel(metricKey))} trend, ${valid.length} recorded days">
@@ -33,8 +39,8 @@ export function timeSeriesChart({ points = [], metricKey, selectedDate, id = 'se
         <path class="chart-line" d="${path}"/>
         ${points.map((point, index) => !Number.isFinite(point.value) ? '' : `<circle class="chart-point ${point.date === selectedDate ? 'is-selected' : ''}" cx="${x(index)}" cy="${y(point.value)}" r="${point.date === selectedDate ? 5 : 3}"><title>${escapeHtml(label(point))}</title></circle>`).join('')}
       </svg>
-      ${interactive ? points.map((point, index) => `<button type="button" class="chart-hit ${point.date === selectedDate ? 'is-selected' : ''}" data-day="${escapeHtml(point.date)}" style="left:${x(index) / 10}%;top:${(Number.isFinite(point.value) ? y(point.value) : 192) / 2.2}%" aria-label="${escapeHtml(label(point))}" aria-pressed="${point.date === selectedDate}"><span class="chart-tip ${index > points.length / 2 ? 'tip-left' : 'tip-right'}">${escapeHtml(label(point))}</span></button>`).join('') : ''}
+      ${interactive ? points.map((point, index) => `<button type="button" class="chart-hit ${point.date === selectedDate ? 'is-selected' : ''}" data-day="${escapeHtml(point.date)}" tabindex="${index === focusIndex ? 0 : -1}" style="left:${x(index) / 10}%;top:${(Number.isFinite(point.value) ? y(point.value) : 192) / 2.2}%" aria-label="${escapeHtml(label(point))}" aria-pressed="${point.date === selectedDate}"><span class="chart-tip ${index > points.length / 2 ? 'tip-left' : 'tip-right'}">${escapeHtml(label(point))}</span></button>`).join('') : ''}
       <div class="chart-dates" aria-hidden="true">${ticks.map(index => `<span>${escapeHtml(formatDate(points[index].date, { short: true }))}</span>`).join('')}</div>
-    </div>
+    </div></div></div><p class="chart-pan-hint">Swipe across the chart to explore more dates.</p>
   </figure>`;
 }

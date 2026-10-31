@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-31T00:32:07.172580+00:00",
+  "generatedAt": "2026-10-31T01:02:44.975751+00:00",
   "title": "Design System: AETHRIVA",
   "extensions": {
     "colorMeta": {
@@ -71,16 +71,44 @@
       "energy": {
         "role": "secondary",
         "displayName": "Energy"
+      },
+      "sleep-panel": {
+        "role": "secondary",
+        "displayName": "Sleep reading panel"
+      },
+      "steps-panel": {
+        "role": "secondary",
+        "displayName": "Steps reading panel"
+      },
+      "heart-rate-panel": {
+        "role": "secondary",
+        "displayName": "Resting heart rate reading panel"
+      },
+      "energy-panel": {
+        "role": "secondary",
+        "displayName": "Energy reading panel"
+      },
+      "reading-ink": {
+        "role": "neutral",
+        "displayName": "Reading ink"
+      },
+      "reading-label": {
+        "role": "neutral",
+        "displayName": "Reading label"
+      },
+      "reading-secondary": {
+        "role": "neutral",
+        "displayName": "Reading context"
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Page heading",
-        "purpose": "Responsive main page title."
+        "purpose": "Main page title: 40px desktop, 34px below 800px, 32px below 600px."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Base reading text; context-specific overrides documented in DESIGN.md."
+        "purpose": "16px reading base with 1.65 line height, including on phones; contextual sizes documented in DESIGN.md."
       }
     },
     "shadows": [
@@ -91,7 +119,7 @@
       },
       {
         "name": "scope-popover",
-        "value": "0 12px 26px #0006",
+        "value": "0 12px 30px #0009",
         "purpose": "Source and date scope overlays."
       },
       {
@@ -109,51 +137,58 @@
       {
         "name": "state-transition",
         "value": ".18s",
-        "purpose": "Navigation, button, and question-card state changes."
-      },
-      {
-        "name": "tip-opacity",
-        "value": ".15s",
-        "purpose": "Chart tooltip fade."
-      },
-      {
-        "name": "selection-in",
-        "value": ".24s",
-        "purpose": "Selected chart marks fade from .35 to 1 opacity when motion is allowed."
+        "purpose": "Navigation, buttons, questions, and metric-card actions."
       }
     ],
     "breakpoints": [
       {
-        "name": "wide-plot-min",
-        "value": "1281px"
+        "name": "wide-rail-min",
+        "value": "1600px"
       },
       {
-        "name": "header-wrap-max",
-        "value": "1279px"
+        "name": "desktop-rail-min",
+        "value": "1200px"
       },
       {
-        "name": "tablet-max",
-        "value": "900px"
+        "name": "horizontal-nav-max",
+        "value": "1199px"
       },
       {
-        "name": "mobile-max",
+        "name": "heading-tablet-max",
+        "value": "800px"
+      },
+      {
+        "name": "overview-stack-max",
+        "value": "780px"
+      },
+      {
+        "name": "supporting-stack-max",
+        "value": "700px"
+      },
+      {
+        "name": "phone-chart-max",
         "value": "600px"
+      },
+      {
+        "name": "readings-first-max",
+        "value": "560px"
       }
     ],
     "evidence": {
       "sources": [
         "dist/styles.css",
+        "dist/experience.css",
+        "dist/workspace.css",
         "dist/app.js",
+        "dist/charts.js",
         "dist/pages/experience.js",
         "dist/pages/workspace.js",
-        "docs/IMPLEMENTATION.md",
-        "docs/SOURCE_MAP.md",
-        ".superpowers/visual-review.md"
+        "dist/demo-state.js"
       ],
-      "method": "Code-led scan of current implementation; visual-review disposition is ship. No new browser assessment performed by this documentation pass.",
+      "method": "Code-led refresh of the current implementation. This documentation pass performed no new browser assessment; verification evidence is maintained separately in docs/VERIFICATION.md.",
       "tonalRamps": "Omitted: no source tonal ramps; actual-token scope excludes synthesized palettes.",
-      "motionAccessibility": "prefers-reduced-motion: reduce and html[data-motion=off] disable animation, transitions, and CSS smooth scrolling.",
-      "previewLimits": "Snippets reproduce distinctive source CSS with live custom properties and literal fallbacks. They are style previews, not wired application behavior; Nunito needs the bundled application font to match exactly."
+      "motionAccessibility": "The OS reduced-motion preference and user toggle disable transitions/animations and programmatic smooth scrolling.",
+      "previewLimits": "Self-contained style previews use source CSS values and live custom properties with literal fallbacks. They do not wire navigation, questions, or evidence; Nunito requires the bundled application font."
     }
   },
   "components": [
@@ -162,15 +197,15 @@
       "kind": "button",
       "refersTo": "button-primary",
       "html": "<button class=\"ds-primary\">Explore your patterns</button>",
-      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:8px 15px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:650 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:var(--accent,#86b0ff);color:var(--on-accent,#10203c);border-color:transparent}.ds-primary:hover{background:#a1c2ff}.ds-primary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
-      "description": "Filled main action; source minimum height is 42px."
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:700 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:var(--accent,#86b0ff);color:var(--on-accent,#10203c);border-color:transparent}.ds-primary:hover{background:#a1c2ff}.ds-primary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "description": "Filled main action with a 44px minimum height."
     },
     {
       "name": "Secondary button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "html": "<button class=\"ds-secondary\">Explore recovery</button>",
-      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:42px;padding:8px 15px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:650 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:none}.ds-secondary:hover{background:var(--hover,#252e3d);border-color:var(--accent,#86b0ff)}.ds-secondary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "html": "<button class=\"ds-secondary\">Explore demo sources</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;padding:10px 16px;border:1px solid var(--control-line,#63758f);border-radius:9px;color:var(--text,#f2f5fb);font:700 14px/1.4 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),border-color .18s cubic-bezier(.16,1,.3,1);background:none}.ds-secondary:hover{background:var(--hover,#252e3d);border-color:var(--accent,#86b0ff)}.ds-secondary:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Outlined supporting action."
     },
     {
@@ -178,22 +213,22 @@
       "kind": "input",
       "refersTo": "field",
       "html": "<input class=\"ds-field\" type=\"date\" aria-label=\"Start date\" value=\"2026-10-01\">",
-      "css": ".ds-field{background:var(--input,#12161c);color:var(--text,#f2f5fb);border:1px solid var(--control-line,#63758f);border-radius:8px;padding:8px 12px;max-width:100%;min-height:40px;font:450 13px/1.6 Nunito,sans-serif;color-scheme:dark}.ds-field:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "css": ".ds-field{background:var(--input,#12161c);color:var(--text,#f2f5fb);border:1px solid var(--control-line,#63758f);border-radius:8px;padding:9px 12px;max-width:100%;min-height:44px;font:450 14px/1.65 Nunito,sans-serif;color-scheme:dark}.ds-field:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Inset date input with visible focus."
     },
     {
       "name": "Navigation",
       "kind": "nav",
-      "html": "<nav aria-label=\"Demo views\"><button class=\"ds-nav\" aria-current=\"page\">Overview</button><button class=\"ds-nav\">Recovery</button></nav>",
-      "css": ".ds-nav{display:inline-flex;min-height:42px;padding:9px 12px;background:none;border:0;border-radius:9px;color:var(--secondary,#b1bdcd);font:650 14px/1.6 Nunito,sans-serif;cursor:pointer;transition:background .18s cubic-bezier(.16,1,.3,1),color .18s cubic-bezier(.16,1,.3,1)}.ds-nav:hover{background:var(--hover,#252e3d);color:var(--text,#f2f5fb)}.ds-nav[aria-current=page]{background:var(--selection,#233755);color:var(--accent,#86b0ff)}.ds-nav:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
-      "description": "Tonal selected route and quiet unselected route."
+      "html": "<nav class=\"ds-nav-list\" aria-label=\"Demo views\"><button class=\"ds-nav\" aria-current=\"page\">Overview</button><button class=\"ds-nav\">Recovery</button><button class=\"ds-nav\">Intelligence</button></nav>",
+      "css": ".ds-nav-list{display:flex;flex-direction:column;gap:6px;max-width:196px;background:var(--nav,#13161b);padding:18px}.ds-nav{display:flex;align-items:center;gap:12px;min-height:46px;padding:10px 13px;background:none;border:0;border-radius:8px;color:var(--secondary,#b8c3d2);font:650 14px/1.65 Nunito,sans-serif;cursor:pointer;text-align:left;white-space:nowrap;transition:background .18s cubic-bezier(.16,1,.3,1),color .18s cubic-bezier(.16,1,.3,1)}.ds-nav:hover{background:var(--hover,#252e3d);color:var(--text,#f2f5fb)}.ds-nav[aria-current=page]{background:var(--selection,#233755);color:#b8d1ff}.ds-nav:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}@media(max-width:1199px){.ds-nav-list{flex-direction:row;max-width:100%;overflow-x:auto;gap:4px}.ds-nav{min-height:42px;padding:8px 12px;flex:none}}",
+      "description": "Vertical desktop route rail; a horizontal scrolling route row below 1200px."
     },
     {
       "name": "Annotation chip",
       "kind": "chip",
       "refersTo": "chip",
       "html": "<span class=\"ds-chip\">Synthetic data</span>",
-      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;max-width:100%;border-radius:5px;background:var(--chip,#233149);padding:3px 9px;font:650 12px/1.6 Nunito,sans-serif;color:#bed4ff;overflow-wrap:anywhere}",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;max-width:100%;border-radius:5px;background:var(--chip,#233149);padding:4px 9px;font:700 12px/1.5 Nunito,sans-serif;color:#c7daff;overflow-wrap:anywhere}",
       "description": "Non-interactive compact annotation; no hover state in source."
     },
     {
@@ -201,43 +236,56 @@
       "kind": "card",
       "refersTo": "panel",
       "html": "<section class=\"ds-panel\"><h2>What the records show</h2><p>Descriptive observations, with the inputs close at hand.</p></section>",
-      "css": ".ds-panel{background:var(--surface,#1a1e24);color:var(--text,#f2f5fb);padding:26px;border-radius:14px;min-width:0;font:450 15px/1.6 Nunito,sans-serif}.ds-panel h2{margin:0 0 16px;font-size:21px;font-weight:700;line-height:1.25;letter-spacing:-.025em}.ds-panel p{margin:0;color:var(--secondary,#b1bdcd);max-width:75ch}@media(max-width:600px){.ds-panel{padding:21px 18px;border-radius:12px}}",
+      "css": ".ds-panel{background:var(--surface,#1a1e24);color:var(--text,#f2f5fb);padding:28px;border-radius:14px;min-width:0;font:450 16px/1.65 Nunito,sans-serif}.ds-panel h2{margin:0 0 16px;font-size:25px;font-weight:750;line-height:1.25;letter-spacing:-.025em}.ds-panel p{margin:0;color:var(--secondary,#b8c3d2);max-width:72ch}@media(max-width:600px){.ds-panel{padding:22px 18px}}",
       "description": "Static tonal content surface; no hover state in source."
     },
     {
       "name": "Inline evidence action",
       "kind": "button",
-      "html": "<button class=\"ds-evidence\">View evidence</button>",
-      "css": ".ds-evidence{display:inline-flex;align-items:center;justify-content:flex-start;min-height:34px;padding:7px 0;background:none;border:0;color:var(--accent,#86b0ff);font:650 13px/1.5 Nunito,sans-serif;text-align:left;cursor:pointer}.ds-evidence:hover{text-decoration:underline;text-underline-offset:4px}.ds-evidence:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
+      "html": "<button class=\"ds-evidence\">Trace this finding</button>",
+      "css": ".ds-evidence{display:inline-flex;align-items:center;justify-content:flex-start;min-height:40px;padding:8px 0;background:none;border:0;color:var(--accent,#86b0ff);font:700 14px/1.5 Nunito,sans-serif;text-align:left;cursor:pointer}.ds-evidence:hover{text-decoration:underline;text-underline-offset:4px}.ds-evidence:focus-visible{outline:2px solid var(--accent,#86b0ff);outline-offset:4px}",
       "description": "Opens focusable evidence within the page; this preview demonstrates styling only."
+    },
+    {
+      "name": "Pastel sleep reading",
+      "kind": "card",
+      "refersTo": "sleep-reading",
+      "html": "<section class=\"ds-reading\"><h3>Sleep duration</h3><p>7h 30m</p><span>Oct 30 \u00b7 Synthetic demonstration</span><button>Evidence</button></section>",
+      "css": ".ds-reading{display:flex;flex-direction:column;align-items:flex-start;gap:14px;background:var(--sleep-panel,#ded3ff);color:#182027;min-width:0;padding:22px;border-radius:14px;font:450 16px/1.65 Nunito,sans-serif}.ds-reading h3{margin:0;font-size:15px;font-weight:700;line-height:1.4;color:#29333e}.ds-reading p{margin:0;font-size:clamp(29px,3vw,42px);line-height:1.12;font-weight:750;letter-spacing:-.035em;font-variant-numeric:tabular-nums}.ds-reading>span{font-size:12px;color:#37414a}.ds-reading button{min-height:44px;padding:7px 0;background:transparent;border:0;color:#26313c;font:750 14px/1.35 Nunito,sans-serif;cursor:pointer}.ds-reading button:hover{color:#07111b;text-decoration:underline;text-underline-offset:4px}.ds-reading button:focus-visible{outline:2px solid #26313c;outline-offset:4px}@media(max-width:560px){.ds-reading{padding:15px 12px;border-radius:12px}.ds-reading p{font-size:clamp(24px,6.8vw,32px)}.ds-reading button{min-height:38px}}",
+      "description": "One of four selected-day panels: lavender sleep, peach steps, blue resting heart rate, mint energy. Dark ink and complete units stay readable on pastel surfaces; preview shows an actual fixture reading."
     }
   ],
   "narrative": {
     "northStar": "Carbon + Nunito",
-    "overview": "The selected existing world is a calm dark workspace with rounded Nunito typography, generous primary plots, quiet supporting prose, and evidence close to the finding. This is a record of the shipped code, not a proposal for a replacement identity.\n\nTonal surfaces carry hierarchy while blue marks navigation, actions, and selection. Metric color provides continuity across charts and readings. The implementation is code-led reuse; it has no generated imagery or approved image composition dependency.",
+    "overview": "A dark, calm evidence workspace with rounded Nunito typography, clear readings, and restrained blue navigation. Pastel measurement panels make the selected day the first thing to read; charts and source records provide the context around it. All observations and import details are synthetic; Intelligence calculates locally.",
     "keyCharacteristics": [
-      "Dark carbon surfaces and restrained blue interaction accents.",
-      "Locally bundled Nunito throughout, with tabular numerals for measurements.",
-      "Expansive focus plots balanced by contextual prose.",
-      "Inline, inspectable evidence and explicit synthetic-data context."
+      "Carbon navigation rail on desktop; horizontally scrolling routes below 1200px.",
+      "Four pastel reading panels with dark ink and complete units.",
+      "Four-track dated-record coverage calendar; phone readings precede the circle.",
+      "Compact aligned Recovery charts with one keyboard entry per plot.",
+      "Saved answer dates, named sources, metric scope, and complete inline evidence."
     ],
     "rules": [
       {
-        "name": "The Metric Continuity Rule",
-        "body": "Keep each metric's identity consistent between its label, numeric value, plot, and selected point; retain units and explicit missingness.",
+        "name": "Metric continuity",
+        "body": "Retain metric identity across panels, chart lines, coverage tracks, units, and evidence. Color does not encode health quality.",
+        "section": "colors"
+      },
+      {
+        "name": "Coverage means records",
+        "body": "Every circle segment corresponds to a civil date and one measurement. Gaps mean unrecorded or excluded data; tracks are never a health or readiness score.",
         "section": "colors"
       }
     ],
     "dos": [
-      "Do reuse the Carbon + Nunito world and existing metric colors.",
-      "Do keep readable prose, visible keyboard focus, scoped calculations, units, and evidence actions together.",
-      "Do preserve chart gaps, explicit missing states, and valid recorded zero values.",
-      "Do preserve responsive stacking and intentional internal scrolling."
+      "Do keep dark ink on pastel reading panels and the 16px reading base on phones.",
+      "Do distinguish hidden-by-filter measurements from genuinely absent observations.",
+      "Do preserve recorded zero, bounded day controls, keyboard chart navigation, and saved answer scope.",
+      "Do retain complete inline evidence and readable horizontally scrollable records."
     ],
     "donts": [
-      "Don't replace the selected visual world during incremental work.",
-      "Don't add a composite health/readiness score or imply clinical or causal conclusions.",
-      "Don't present synthetic source cards or locally calculated answers as live integrations or live AI."
+      "Don't interpret coverage as a health or readiness score or infer causation from association.",
+      "Don't present synthetic source rows as live connections or locally calculated answers as live AI."
     ]
   }
 }

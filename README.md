@@ -20,9 +20,9 @@ Open http://127.0.0.1:4173. Validate with `npm test` and `npm run check`.
 
 ## Product
 
-- Overview with synchronized date exploration and coverage.
+- Overview with pastel measurement panels, a dated coverage calendar, and synchronized exploration.
 - Connect with an honest synthetic source registry.
-- Recovery with four separate linked measurement histories.
+- Recovery with four aligned measurement histories, keyboard exploration, and a shared selected date.
 - Insights with transparent period comparisons and associations.
 - Timeline with values, units, Pacific timestamps, sources, and record IDs.
 - Intelligence with five local, deterministic question types and complete evidence.

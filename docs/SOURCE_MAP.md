@@ -1,17 +1,27 @@
 # Source and decision map
 
-## Reused material
+## Visual and application reuse
 
-The canonical no-trailing-space health application's selected `design-preview` supplied Carbon colors, locally bundled Nunito, expansive Focus layouts, top navigation, inline detail patterns, and segmented SVG chart/day-selection ideas. This implementation retains these choices while replacing independent sample arrays and placeholder answers.
+The selected existing `design-preview` supplied Carbon colors, bundled Nunito, focus layouts, inline details and segmented chart/day-selection patterns. The current application keeps those choices and all seven main views. `DESIGN.md` records the design; the Nunito font and its SIL Open Font License remain bundled under `dist/assets/`.
 
-Nunito font bytes and its OFL license are copied from that selected preview. No other font or image dependency is required. No original private archive, credential, service installer, snapshot, or application server is included.
+Original local applications remain outside this repository. Their private credentials, databases, archives and installers are not copied into the public artifact. The current source repository is [coderarush/Bodha](https://github.com/coderarush/Bodha); the AETHRIVA product name, TanujBuilds/coderarush credits and original Git history are retained.
 
-## Preserved references
+## Real data reuse
 
-`docs/reference/AETHRIVA_PRD.md` and `AETHRIVA_CODEX_HANDOFF.md` preserve the original product scope. The approved frontend-first, four-hour plan supersedes their Next.js/backend/live-provider implementation instructions for this build. Domain meanings, provenance, calculations, evidence requirements, and descriptive wellness boundaries remain.
+The local bridge reads approved fields from the existing Ascend cache. The existing Health app owns Google Health authorization and synchronization and Lyfta credentials/imports. AETHRIVA adds a read-only projection rather than another provider credential store.
 
-The two original local applications are divergent references. One contains the later ivory/forest presentation and UTC workout normalization; the other contains local AI chat persistence and activity/energy refinements. Both remain outside this repository, unchanged. Their backend tests do not validate this new public browser experience.
+Google Health daily summaries supply saved steps, total sleep and resting-heart-rate values. Original units, sums, counts, aggregation methods and stable source record IDs stay attached. The displayed dates reflect saved Pacific daily aggregates; no precise measurement time is reconstructed. Lyfta supplies sanitized workouts and sets separately. No self-reported energy is inferred.
 
-## Public data
+The public static build starts with empty history. Personal records are returned only by the local same-origin API and are not embedded in static files or documentation.
 
-One immutable fictional October 2026 Pacific fixture supplies all views and answers. Check-in energy appears once in canonical event counts. Missing observations are absent events and explicit chart gaps; the observed October 4 zero-step total remains zero. Dates and import times are fixed for reproducibility.
+## Device sources
+
+The connection catalog records official manufacturer and Bluetooth specification links per entry. Its 36 guides describe eight device categories and distinguish implemented standard BLE adapters from manufacturer or proprietary integrations. Standard Heart Rate, Blood Pressure and Pulse Oximeter adapters are implemented; exact-model hardware validation remains separate. ECG listings do not imply waveform support.
+
+Bluetooth readings remain in page memory, with an explicit local CSV download. Measurement flags and warnings are preserved where available. The catalog and adapter source files are the current capability inventory.
+
+## Historical references
+
+`docs/reference/AETHRIVA_PRD.md`, `docs/reference/AETHRIVA_CODEX_HANDOFF.md`, the earlier plans under `docs/superpowers/`, and `docs/DEMO.md` preserve the original synthetic demonstration scope. Their implementation restrictions do not describe the current real-data release. Domain meanings, provenance, complete calculation inputs and descriptive wellness boundaries still apply.
+
+The fictional October fixture and its legacy helpers now live only under `tests/fixtures/` for regression testing. The runtime dependency graph does not import them. Current behavior is documented in `PRODUCT.md`, `docs/CONTRACTS.md` and `docs/IMPLEMENTATION.md`; delivery and verification evidence are recorded separately.

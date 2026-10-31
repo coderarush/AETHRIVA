@@ -1,19 +1,18 @@
 import { escapeHtml as esc, formatMetric, formatDate, metricLabel, evidenceButton, icon } from '../ui.js';
-import { events as fixtureEvents } from '../data/demo-data.js';
 import { timeSeriesChart, metricColors } from '../charts.js';
-import { datesInRange } from '../data/analytics.js';
+import { datesInRange } from '../data/analytics-core.js';
 
 const keys = ['sleep_duration', 'steps', 'resting_heart_rate', 'energy'];
 const metricIcons = { sleep_duration: 'moon', steps: 'activity', resting_heart_rate: 'heart', energy: 'energy' };
 const shortLabels = {sleep_duration: 'Sleep', steps: 'Steps', resting_heart_rate: 'Resting heart rate', energy: 'Energy'};
-const metricSources = Object.fromEntries(keys.map(key => [key, [...new Set(fixtureEvents.filter(event => event.metricKey === key).map(event => event.sourceId))]]));
+const metricSources = (ctx, key) => ctx.sources.filter(source => source.metricKeys?.includes(key) || ctx.events.some(event => event.metricKey === key && event.sourceId === source.id) || ({wearable:['sleep_duration','resting_heart_rate'],activity:['steps'],checkin:['energy']}[source.id] || []).includes(key)).map(source => source.id);
 const series = (ctx, key) => ctx.summary.seriesByMetric[key] || [];
 const selectedPoint = (ctx, key) => series(ctx, key).find(point => point.date === ctx.state.selectedDate);
 const summaryCalculation = (ctx, key) => ctx.summary.calculations.find(calc => calc.metricKeys.includes(key));
 const selectedIds = ctx => keys.flatMap(key => selectedPoint(ctx, key)?.recordIds || []);
 const dateText = ctx => formatDate(ctx.state.selectedDate, { short: true });
 const rangeText = ctx => `${formatDate(ctx.state.from, { short: true })} – ${formatDate(ctx.state.to, { short: true })}`;
-const excluded = (ctx, key) => (ctx.state.metricKey && ctx.state.metricKey !== 'all' && ctx.state.metricKey !== key) || (ctx.state.sourceIds != null && !metricSources[key].some(id => ctx.state.sourceIds.includes(id)));
+const excluded = (ctx, key) => (ctx.state.metricKey && ctx.state.metricKey !== 'all' && ctx.state.metricKey !== key) || (ctx.state.sourceIds != null && metricSources(ctx,key).length > 0 && !metricSources(ctx,key).some(id => ctx.state.sourceIds.includes(id)));
 const restoreButton = () => '<button class="text-button" data-restore-measurements>Show all measurements</button>';
 const valueText = (ctx, key) => excluded(ctx, key) ? 'Hidden by filters' : selectedPoint(ctx, key)?.value == null ? 'Not recorded' : formatMetric(selectedPoint(ctx, key).value, key);
 const valueClass = (ctx, key) => excluded(ctx, key) ? 'is-hidden' : selectedPoint(ctx, key)?.value == null ? 'is-missing' : '';
@@ -79,12 +78,13 @@ function filteredChart(ctx, key, id) {
 }
 
 export async function renderOverview(ctx) {
+  if (ctx.workspace && !ctx.workspace.events.length) return `<section class="welcome-workspace panel"><span class="welcome-symbol">${icon('connect',36)}</span><h2>Your health story starts here.</h2><p>Bring your measurements and workouts together. Choose a source, or connect a compatible Bluetooth heart-rate monitor.</p><div class="button-row"><button class="button primary" data-screen="connect">Connect a source ${icon('arrow',18)}</button>${ctx.workspace.mode === 'local' ? '<button class="button" data-refresh-workspace>Refresh history</button>' : '<a class="button" href="http://127.0.0.1:4173/?screen=connect">Open local workspace</a>'}</div><p class="muted">Your measurements appear when a source provides them. No placeholder readings.</p></section>`;
   const key = keys.includes(ctx.state.plotMetric) ? ctx.state.plotMetric : 'sleep_duration';
   const calc = summaryCalculation(ctx, key);
   return `<div class="overview-page"><section class="daily-journal" aria-labelledby="daily-title"><div class="journal-centerpiece"><h2 id="daily-title">Your days, connected.</h2>${coverageCalendar(ctx)}${dayNavigator(ctx)}</div>${selectedValues(ctx)}<div class="daily-footer"><span>Recorded observations, one date at a time.</span>${selectedIds(ctx).length ? `<button class="text-button" data-view-day="${esc(ctx.state.selectedDate)}">All records for ${esc(dateText(ctx))} ${icon('arrow', 16)}</button>` : ''}</div></section>
-    <section class="month-section" aria-labelledby="month-title"><div class="section-heading"><div><h2 id="month-title">The days around it.</h2><p class="muted">${esc(rangeText(ctx))}, 2026 · Choose a measurement to explore.</p></div><button class="text-button" data-screen="recovery">Compare all four ${icon('arrow', 16)}</button></div><div class="plot-metric-tabs" role="group" aria-label="Measurement shown in trend">${keys.map(metric => `<button id="plot-tab-${metric}" data-plot-metric="${metric}" aria-pressed="${metric === key}" style="--metric-color:${metricColors[metric]}">${icon(metricIcons[metric], 17)}${shortLabels[metric]}</button>`).join('')}</div>
+    <section class="month-section" aria-labelledby="month-title"><div class="section-heading"><div><h2 id="month-title">The days around it.</h2><p class="muted">${esc(rangeText(ctx))}, ${esc(ctx.state.to.slice(0,4))} · Choose a measurement to explore.</p></div><button class="text-button" data-screen="recovery">Compare all four ${icon('arrow', 16)}</button></div><div class="plot-metric-tabs" role="group" aria-label="Measurement shown in trend">${keys.map(metric => `<button id="plot-tab-${metric}" data-plot-metric="${metric}" aria-pressed="${metric === key}" style="--metric-color:${metricColors[metric]}">${icon(metricIcons[metric], 17)}${shortLabels[metric]}</button>`).join('')}</div>
     <div class="focus-layout"><section class="focus-trend" style="--metric-color:${metricColors[key]}"><div class="trend-heading"><h3>${esc(metricLabel(key))} across your days</h3><p><strong>${esc(valueText(ctx, key))}</strong><span>${esc(dateText(ctx))}</span></p></div>${filteredChart(ctx, key, 'overview-trend')}<div class="chart-footer"><span>${excluded(ctx, key) ? 'Excluded by the current filters' : `${esc(ctx.summary.coverage.metrics[key]?.observedDays ?? 0)} days recorded · Gaps are missing observations`}</span>${!excluded(ctx, key) && calc?.sourceRecordIds.length ? evidenceButton([calc.id], 'View period evidence') : ''}</div></section>${insightPanel(ctx)}</div>${coverage(ctx)}</section>
-    <section class="source-journey"><div><h2>Every reading has a source.</h2><p>Follow the records behind your picture, including what’s missing.</p></div><button class="button" data-screen="connect">Explore demo sources ${icon('arrow', 16)}</button></section></div>`;
+    <section class="source-journey"><div><h2>Every reading has a source.</h2><p>Follow the records behind your picture, including what’s missing.</p></div><button class="button" data-screen="connect">Manage connections ${icon('arrow', 16)}</button></section></div>`;
 }
 
 function comparisonPanel(ctx) {
@@ -99,7 +99,7 @@ function comparisonPanel(ctx) {
 }
 
 export async function renderRecovery(ctx) {
-  return `<div class="recovery-page"><section class="recovery-intro"><div><h2>Four measures, one timeline.</h2><p class="muted">Compare the same dates. Each chart keeps its own units.</p></div>${dayNavigator(ctx)}</section><div class="recovery-chart-help"><span>${esc(rangeText(ctx))}, 2026</span><span>Choose a point or use the day controls. Arrow keys move through a focused chart.</span></div>
+  return `<div class="recovery-page"><section class="recovery-intro"><div><h2>Four measures, one timeline.</h2><p class="muted">Compare the same dates. Each chart keeps its own units.</p></div>${dayNavigator(ctx)}</section><div class="recovery-chart-help"><span>${esc(rangeText(ctx))}, ${esc(ctx.state.to.slice(0,4))}</span><span>Choose a point or use the day controls. Arrow keys move through a focused chart.</span></div>
     <div class="recovery-grid">${keys.map(key => {
       const point = selectedPoint(ctx, key), calc = summaryCalculation(ctx, key);
       return `<section class="recovery-chart" style="--metric-color:${metricColors[key]}"><div class="recovery-reading"><h3>${icon(metricIcons[key], 20)}${esc(metricLabel(key))}</h3><p class="recovery-value ${valueClass(ctx, key)}">${esc(valueText(ctx, key))}</p><p class="recovery-date">${esc(dateText(ctx))}</p><p class="measure-context">${esc(sourceText(ctx, key))}</p>${excluded(ctx, key) ? restoreButton() : point?.recordIds?.length ? evidenceButton(point.recordIds, 'View day evidence') : ''}</div><div class="recovery-plot">${filteredChart(ctx, key, `recovery-${key}`)}<div class="chart-footer"><span>${excluded(ctx, key) ? 'Excluded by the current filters' : `${esc(ctx.summary.coverage.metrics[key]?.observedDays ?? 0)} days recorded · Gaps are missing observations`}</span>${!excluded(ctx, key) && calc?.sourceRecordIds.length ? evidenceButton([calc.id], 'View period evidence') : ''}</div></div></section>`;

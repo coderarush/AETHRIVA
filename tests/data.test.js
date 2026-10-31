@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync} from 'node:fs';
 
-const fixturePath = new URL('../dist/data/demo-data.js', import.meta.url);
+const fixturePath = new URL('./fixtures/demo-data.js', import.meta.url);
 test('canonical fixture exposes complete validated provenance and one energy event per checkin', async () => {
   assert.ok(existsSync(fixturePath), 'canonical fixture must exist');
   const {events, checkins, sources, validateFixture} = await import(fixturePath);
@@ -17,7 +17,7 @@ test('canonical fixture exposes complete validated provenance and one energy eve
   assert.throws(() => validateFixture({events:broken, sources, checkins}), /provenance/i);
 });
 
-const analyticsPath = new URL('../dist/data/analytics.js', import.meta.url);
+const analyticsPath = new URL('./fixtures/analytics.js', import.meta.url);
 test('summary retains zeros, deliberate gaps, source scope and metric scope', async () => {
   assert.ok(existsSync(analyticsPath), 'analytics must exist');
   const a = await import(analyticsPath);
@@ -87,7 +87,7 @@ test('low-energy contrasts compare complete sleep/steps pairs independently and 
   assert.equal(a.lowEnergyRecords(records.filter(e=>e.id!=='evt_energy_1'),'sleep_duration',{}).status,'insufficient_data');
 });
 
-const servicePath = new URL('../dist/data/demo-service.js',import.meta.url);
+const servicePath = new URL('./fixtures/demo-service.js',import.meta.url);
 test('all six service methods are async and citations resolve complete scoped calculation inputs',async()=>{
   assert.ok(existsSync(servicePath),'demo service must exist');
   const s=await import(servicePath);

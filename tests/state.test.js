@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createInitialState, normalizeState, stateFromSearch, searchFromState, rangeState, toggleSource, scopeFromEvidence} from '../dist/demo-state.js';
+import {createInitialState, normalizeState, stateFromSearch, searchFromState, rangeState, toggleSource, scopeFromEvidence} from './fixtures/demo-state.js';
 
 test('out-of-range day is clamped and an empty source filter remains empty', () => {
   const state = normalizeState({...createInitialState(), from: '2026-10-10', to: '2026-10-15', selectedDate: '2026-10-30', sourceIds: []});

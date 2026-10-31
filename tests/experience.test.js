@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { renderOverview, renderRecovery } from '../dist/pages/experience.js';
 import { timeSeriesChart } from '../dist/charts.js';
-import { createInitialState } from '../dist/demo-state.js';
-import { sources } from '../dist/data/demo-data.js';
-import { summarize, comparePeriods, buildInsights, selectEvents } from '../dist/data/demo-service.js';
+import { createInitialState } from './fixtures/demo-state.js';
+import { sources } from './fixtures/demo-data.js';
+import { summarize, comparePeriods, buildInsights, selectEvents } from './fixtures/demo-service.js';
 
 async function context(changes = {}) {
   const state = { ...createInitialState(), ...changes };

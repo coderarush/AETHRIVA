@@ -1,0 +1,12 @@
+import {escapeHtml as esc,icon,formatDate} from '../ui.js';
+
+export function renderWorkouts(ctx) {
+  const workouts=ctx.workspace?.workouts || [];
+  const visible=workouts.filter(workout=>workout.date>=ctx.state.from&&workout.date<=ctx.state.to&&ctx.state.sourceIds.includes('lyfta')&&ctx.state.metricKey==='all').sort((a,b)=>b.date.localeCompare(a.date));
+  if(!workouts.length)return '';
+  return `<section class="workout-history" aria-labelledby="workout-history-title"><div class="section-title"><div><h2 id="workout-history-title">Your training, from Lyfta.</h2><p class="muted">Completed sets stay separate from saved or planned sets.</p></div><span class="pill">${visible.length} workouts in scope</span></div>${visible.length?visible.map(workout=>{
+    const exercises=workout.exercises||[],sets=exercises.flatMap(exercise=>exercise.sets||[]),completed=sets.filter(set=>set.completed).length;
+    const weightUnit=workout.weightUnit||'unit not supplied';
+    return `<details class="workout-record"><summary><span class="workout-record-icon">${icon('activity',22)}</span><span><strong>${esc(workout.title||'Workout')}</strong><small>${esc(formatDate(workout.date))}, ${esc(workout.date.slice(0,4))} · ${exercises.length} exercises · ${completed} completed sets</small></span><span class="workout-expand">View workout ${icon('arrow',16)}</span></summary><div class="workout-detail"><p class="muted">Source: Lyfta · Record ${esc(workout.id)} · Weight: ${esc(weightUnit)}</p>${exercises.map(exercise=>`<section class="workout-exercise"><h3>${esc(exercise.name||'Exercise')}</h3><div class="table-wrap" tabindex="0" role="region" aria-label="${esc(exercise.name||'Exercise')} sets"><table class="evidence-table"><thead><tr><th>Set</th><th>Weight</th><th>Reps</th><th>Reps in reserve</th><th>Status</th></tr></thead><tbody>${(exercise.sets||[]).map((set,index)=>`<tr><td>${index+1}</td><td>${Number.isFinite(set.weight)?`${esc(set.weight)} ${esc(weightUnit)}`:'Not recorded'}</td><td>${Number.isFinite(set.reps)?esc(set.reps):'Not recorded'}</td><td>${Number.isFinite(set.rir)?esc(set.rir):'Not recorded'}</td><td>${set.completed?'Completed':'Not marked complete'}</td></tr>`).join('')}</tbody></table></div></section>`).join('')}</div></details>`;
+  }).join(''):'<p class="muted">No workouts match these dates and filters. Include Lyfta and select All metrics to see your training.</p>'}</section>`;
+}

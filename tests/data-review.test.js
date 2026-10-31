@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {answerQuestion, buildInsights, summarize, comparePeriods, resolveEvidence} from '../dist/data/demo-service.js';
-import {sources} from '../dist/data/demo-data.js';
+import {answerQuestion, buildInsights, summarize, comparePeriods, resolveEvidence} from './fixtures/demo-service.js';
+import {sources} from './fixtures/demo-data.js';
 import {renderOverview, renderRecovery} from '../dist/pages/experience.js';
 
 test('unavailable measurements and mixed requests never receive unrelated supported findings', async () => {

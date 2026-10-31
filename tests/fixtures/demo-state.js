@@ -1,4 +1,4 @@
-import {sources, DEMO_START, DEMO_END} from './data/demo-data.js';
+import {sources, DEMO_START, DEMO_END} from './demo-data.js';
 export const screens = ['overview', 'connect', 'recovery', 'insights', 'timeline', 'intelligence', 'reports', 'about'];
 const metricKeys = ['all', 'sleep_duration', 'steps', 'resting_heart_rate', 'energy'];
 const plotMetricKeys = metricKeys.slice(1);

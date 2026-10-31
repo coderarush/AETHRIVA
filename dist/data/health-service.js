@@ -22,7 +22,7 @@ async function comparePeriods(filters={}) { const result=compareRecords(events,f
 const number=(value,digits=1)=>value===null?'not observed':value.toLocaleString('en-US',{maximumFractionDigits:digits});
 const unit=key=>metrics[key].unit;
 function insight(calc,type,title,summary) {
-  return {id:`insight_${calc.id}`,type,title,summary,periodStart:calc.periodStart,periodEnd:calc.periodEnd,evidenceRecordIds:[...calc.sourceRecordIds],calculationId:calc.id,limitations:[...calc.limitations],generatedAt:AS_OF,isSyntheticDemo:false};
+  return {id:`insight_${calc.id}`,type,title,summary,periodStart:calc.periodStart,periodEnd:calc.periodEnd,evidenceRecordIds:[...calc.sourceRecordIds],calculationId:calc.id,limitations:[...calc.limitations],generatedAt:AS_OF,isSyntheticDemo:snapshot.mode==='synthetic'};
 }
 /** @returns {Promise<Insight[]>} */
 async function buildInsights(filters={}) {

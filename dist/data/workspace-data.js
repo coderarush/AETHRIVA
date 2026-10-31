@@ -75,7 +75,7 @@ export function emptyWorkspace({now=new Date(),error=null}={}) {
 
 /** Validate and copy only fields consumed by the workspace. No credentials or raw provider payloads cross this boundary. */
 export function validateWorkspace(payload) {
-  if(!object(payload)||payload.version!==1||!['local','empty'].includes(payload.mode))throw new Error('Unsupported workspace payload');
+  if(!object(payload)||payload.version!==1||!['local','empty','synthetic'].includes(payload.mode))throw new Error('Unsupported workspace payload');
   if(!object(payload.profile)||!object(payload.range)||!validDate(payload.range.from)||!validDate(payload.range.to)||payload.range.from>payload.range.to)throw new Error('Invalid workspace dates or profile');
   if((Date.parse(payload.range.to)-Date.parse(payload.range.from))/86400000>3660)throw new Error('Workspace date range is too large');
   const rawDeviceReadings=payload.deviceReadings??[];
@@ -85,13 +85,13 @@ export function validateWorkspace(payload) {
   if(!validTimezone(timezone))throw new Error('Invalid workspace time zone');
   const ids=new Set(),sourceMap=new Map();
   const sources=payload.sources.map(source=>{
-    if(!object(source)||!sourceTypes.has(source.sourceType)||!sourceStatuses.has(source.status)||source.isSynthetic!==false)throw new Error('Invalid workspace source');
+    if(!object(source)||!sourceTypes.has(source.sourceType)||!sourceStatuses.has(source.status)||source.isSynthetic!==(payload.mode==='synthetic'))throw new Error('Invalid workspace source');
     const id=text(source.id,'source ID',256);
     if(sourceMap.has(id))throw new Error('Duplicate source ID');
     if(!Array.isArray(source.metricKeys)||source.metricKeys.some(key=>!METRIC_KEYS.includes(key)))throw new Error('Invalid source metrics');
     if((id==='bluetooth'&&source.metricKeys.length)||(id==='checkins'&&(source.sourceType!=='manual'||source.metricKeys.length!==1||source.metricKeys[0]!=='energy')))throw new Error('Invalid journal source metrics');
     if(source.lastSyncedAt!=null&&!timestamp(source.lastSyncedAt))throw new Error('Invalid source sync time');
-    const result={id,name:text(source.name,'source name',200),sourceType:source.sourceType,status:source.status,metricKeys:[...new Set(source.metricKeys)],isSynthetic:false,lastSyncedAt:source.lastSyncedAt||null,description:optionalText(source.description,'source description')||''};
+    const result={id,name:text(source.name,'source name',200),sourceType:source.sourceType,status:source.status,metricKeys:[...new Set(source.metricKeys)],isSynthetic:payload.mode==='synthetic',lastSyncedAt:source.lastSyncedAt||null,description:optionalText(source.description,'source description')||''};
     if(source.syncStatus!=null)result.syncStatus=text(source.syncStatus,'sync status',50);
     sourceMap.set(id,result);return result;
   });
@@ -106,14 +106,14 @@ export function validateWorkspace(payload) {
     if(!validTimezone(eventTimezone))throw new Error(`Invalid event time zone ${id}`);
     const p=event.provenance;
     if(!object(p)||p.sourceName!==source.name||p.sourceType!==source.sourceType)throw new Error(`Invalid provenance ${id}`);
-    if(event.metadata?.isSynthetic===true)throw new Error('Synthetic events are not permitted in a real workspace');
+    if(event.metadata?.isSynthetic===true&&payload.mode!=='synthetic')throw new Error('Synthetic events are not permitted in a real workspace');
     if(event.originalValue!=null&&!finite(event.originalValue))throw new Error(`Invalid original value ${id}`);
     const day=event.metadata?.civilDate||civilDate(event.observedAt,timezone);
     if(!validDate(day)||day<payload.range.from||day>payload.range.to)throw new Error(`Event lies outside workspace dates ${id}`);
     const dailyAggregate=event.metadata?.aggregate===true&&event.metadata?.timestampPrecision==='day'&&event.metadata?.civilDate;
     if(Date.parse(event.importedAt)<Date.parse(event.observedAt)&&!dailyAggregate)throw new Error(`Invalid event time ${id}`);
     if(dailyAggregate&&day>civilDate(event.importedAt,timezone))throw new Error(`Daily aggregate has a future date ${id}`);
-    const metadata={isSynthetic:false};
+    const metadata={isSynthetic:payload.mode==='synthetic'};
     if(dailyAggregate){metadata.aggregate=true;metadata.timestampPrecision='day';}
     if(event.metadata?.civilDate)metadata.civilDate=day;
     if(event.metadata?.aggregation)metadata.aggregation=text(event.metadata.aggregation,'aggregation',200);

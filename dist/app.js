@@ -1,5 +1,6 @@
 import {saveCheckin,saveDeviceReadings} from './data/journal-client.js';
 import {metrics} from './data/metrics.js';
+import {showcaseWorkspace} from './data/showcase-data.js';
 import {loadWorkspace,emptyWorkspace} from './data/workspace-data.js';
 import {createHealthService} from './data/health-service.js';
 import {createWorkspaceState} from './workspace-state.js';
@@ -11,7 +12,7 @@ import {renderConnect, renderInsights, renderTimeline, renderReports, renderAbou
 
 const root = document.getElementById('app');
 const isLocalWorkspace=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
-let workspace=isLocalWorkspace?await loadWorkspace():emptyWorkspace();
+let workspace=isLocalWorkspace?await loadWorkspace():showcaseWorkspace;
 let sources,loadedSources,profile,service,stateModel;
 let selectEvents,summarize,comparePeriods,buildInsights,answerQuestion,resolveEvidence;
 let createInitialState,normalizeState,stateFromSearch,searchFromState,rangeState,toggleSource,scopeFromEvidence;
@@ -129,7 +130,7 @@ async function render({navigation=false,focus=null}={}) {
     const content=snapshot.screen==='intelligence'?renderIntelligence():await renderers[snapshot.screen](ctx);
     if(token!==version)return;
     renderedContext=ctx;
-    root.innerHTML=`<div class="app-shell">${header()}<div class="workspace-banner"><span><i></i>${workspace.mode==='local'?'Your health history · On this computer':snapshot.screen==='overview'?'Your wellness overview':'Your workspace · Connect a source to begin'}</span><button data-screen="about">About your workspace${icon('arrow',14)}</button></div><main class="workspace" id="main-content" tabindex="-1"><header class="page-header"><div><h1 tabindex="-1" id="page-title">${titles[snapshot.screen]}</h1><p class="page-description">${descriptions[snapshot.screen]}</p></div>${snapshot.screen==='connect'?`<div class="connections-shortcuts"><button class="button" data-connection-jump="connected-history-title">Your sources ${icon('source',16)}</button><button class="button" data-connection-jump="bluetooth-title">Pair nearby ${icon('connect',16)}</button></div>`:''}</header>${snapshot.screen==='connect'?'':toolbar()}${workspace.cache?.available===false?'<section class="workspace-load-notice provider-unavailable" role="status"><div><strong>Provider history is unavailable.</strong><p>Google Health and Lyfta are not included in this view. Your saved local records remain available.</p></div><a class="button" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open Health app</a></section>':''}${workspace.error?`<section class="workspace-load-notice" role="alert"><div><strong>Your history could not be loaded.</strong><p>${esc(workspace.error)}. Your saved records are unchanged.</p></div><button class="button" data-refresh-workspace>Try again</button></section>`:''}<div class="page-content ${navigation?'page-arriving':''}">${content}</div>${evidenceHtml()}<footer class="app-footer"><span>Bodha · Connected information. Clearer understanding.</span><div><button data-motion id="motion-toggle" aria-pressed="${motion==='off'}">${motion==='on'?'Reduce motion':'Motion reduced'}</button><button data-screen="about">Privacy & limitations</button><a href="https://github.com/coderarush/Bodha" target="_blank" rel="noopener noreferrer">GitHub${icon('arrow',12)}</a></div></footer></main></div>`;
+    root.innerHTML=`<div class="app-shell">${header()}<div class="workspace-banner"><span><i></i>${workspace.mode==='local'?'Your health history · On this computer':workspace.mode==='synthetic'?'Synthetic sample data · Fictional profile · October 2026':snapshot.screen==='overview'?'Your wellness overview':'Your workspace · Connect a source to begin'}</span><button data-screen="about">About your workspace${icon('arrow',14)}</button></div><main class="workspace" id="main-content" tabindex="-1"><header class="page-header"><div><h1 tabindex="-1" id="page-title">${titles[snapshot.screen]}</h1><p class="page-description">${descriptions[snapshot.screen]}</p></div>${snapshot.screen==='connect'?`<div class="connections-shortcuts"><button class="button" data-connection-jump="connected-history-title">Your sources ${icon('source',16)}</button><button class="button" data-connection-jump="bluetooth-title">Pair nearby ${icon('connect',16)}</button></div>`:''}</header>${snapshot.screen==='connect'?'':toolbar()}${workspace.cache?.available===false?'<section class="workspace-load-notice provider-unavailable" role="status"><div><strong>Provider history is unavailable.</strong><p>Google Health and Lyfta are not included in this view. Your saved local records remain available.</p></div><a class="button" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open Health app</a></section>':''}${workspace.error?`<section class="workspace-load-notice" role="alert"><div><strong>Your history could not be loaded.</strong><p>${esc(workspace.error)}. Your saved records are unchanged.</p></div><button class="button" data-refresh-workspace>Try again</button></section>`:''}<div class="page-content ${navigation?'page-arriving':''}">${content}</div>${evidenceHtml()}<footer class="app-footer"><span>Bodha · Connected information. Clearer understanding.</span><div><button data-motion id="motion-toggle" aria-pressed="${motion==='off'}">${motion==='on'?'Reduce motion':'Motion reduced'}</button><button data-screen="about">Privacy & limitations</button><a href="https://github.com/coderarush/Bodha" target="_blank" rel="noopener noreferrer">GitHub${icon('arrow',12)}</a></div></footer></main></div>`;
     document.title=`${labels[snapshot.screen]} · Bodha`;
     document.documentElement.dataset.screen=snapshot.screen;
     for(const menu of root.querySelectorAll('.scope-toolbar details'))if(openMenus.includes(menu.className))menu.open=true;
@@ -174,7 +175,7 @@ let searchTimer=null;
 async function refreshWorkspace(){
   if(connectionUI.refreshing)return;
   connectionUI.refreshing=true;await render({focus:{id:'page-title'}});
-  const next=isLocalWorkspace?await loadWorkspace():emptyWorkspace();
+  const next=isLocalWorkspace?await loadWorkspace():showcaseWorkspace;
   connectionUI.refreshing=false;
   if(next.error){workspace={...workspace,error:next.error};await render();toast('History could not be refreshed. Existing records are still available.');return;}
   requestVersion++;sending=false;conversation=[];draft='';evidence=null;

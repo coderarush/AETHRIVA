@@ -1,0 +1,11 @@
+.env
+.env.*
+.local/
+*.sqlite*
+*.enc
+*.log
+.DS_Store
+node_modules/
+.superpowers/
+*.tgz
+*.tar.gz

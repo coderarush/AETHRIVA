@@ -18,7 +18,10 @@ test('all public first-run surfaces are empty and omit fictional identity and de
     const html=await renderer(ctx);assert.doesNotMatch(html,/Alex Taylor|synthetic|fictional|demo workspace|Reset demo/i);
     assert.doesNotMatch(html,/evt_sleep_duration|7700|7,700/);
   }
-  assert.match(await renderOverview(ctx),/Connect a source/);
+  const overview=await renderOverview(ctx);
+  assert.match(overview,/class="overview-page"/);
+  assert.match(overview,/Selected day/);
+  assert.doesNotMatch(overview,/Connect a source|Open local workspace|Manage connections/);
   assert.match(await renderRecovery(ctx),/Not recorded/);
   assert.doesNotMatch(await renderRecovery(ctx),/Hidden by filters/);
 });
